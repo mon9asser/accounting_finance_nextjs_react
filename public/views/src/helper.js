@@ -367,7 +367,7 @@ class HelperData {
             }
             
             
-            <div>
+            <div style={{margin: "0 auto"}}>
               <div className={`response-msg ${result.cls} ${result.type}`}>{result.message}</div>
                 <this.AdCompaignBox position="before_subscribe" data={camp_data}/> 
                 <form className="set-center form-group set-focus" action="/" method="get"> 
