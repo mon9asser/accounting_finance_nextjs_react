@@ -76,31 +76,25 @@ utillRouter.get('/search', middlewareTokens, async (req, res) => {
 
 
 
-// robots.txt file in /api root
-utillRouter.get('/robots.txt', async (req, res) => {
+utilRouter.get('/robots.txt', async (req, res) => {
     try {
-         
-        // Get the robots.txt content from the settings
-        var ads_content = `
-            User-agent: *
-            Disallow: /
-        `;
-        
+        // Define the robots.txt content
+        let robotsContent = `User-agent: *\nDisallow: /`;
+
         // Ensure line breaks are properly handled
-        ads_content = ads_content.replace(/\r?\n/g, '\n');
-        
+        robotsContent = robotsContent.replace(/\r?\n/g, '\n');
+
         // Set the content type to plain text
         res.type('text/plain');
-        
+
         // Send the robots.txt content as the response
-        res.send(ads_content);
+        res.send(robotsContent);
     } catch (error) {
         // Handle any errors that occur during the process
-        console.error('Error fetching ads.txt content:', error);
+        console.error('Error fetching robots.txt content:', error);
         res.status(500).send('Internal Server Error');
     }
+});
 
-   
-}); 
 
 module.exports = { utillRouter }
