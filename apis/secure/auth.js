@@ -70,7 +70,7 @@ const verifyToken_old = (req, res, next) => {
 
 const verifyToken = (req, res, next) => {
     
-  var token = req.headers['authorization'];
+  
   var api_keys = req.headers['x-api-key'];
   
   if( api_keys == undefined  ) {
@@ -89,14 +89,7 @@ const verifyToken = (req, res, next) => {
     });
     
   }
-
-  if (token== undefined) {
-      return res.send({
-          message: 'Token is required.',
-          is_error: true, 
-          data: []
-      });
-  }
+ 
   
   next();
   
