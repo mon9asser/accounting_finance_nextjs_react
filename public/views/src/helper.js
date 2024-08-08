@@ -1201,7 +1201,7 @@ class HelperData {
     }
     
     async sendRequest ({api, method, data, headers, is_create } = null) {
-        
+        /*
         var generate_token = await this.generateToken(navigator.userAgent)
         if( generate_token.is_error ) {
           return; 
@@ -1214,6 +1214,7 @@ class HelperData {
         }
          
         headers["authorization"] = token;
+        */
         headers["x-api-key"] = 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132';
         
         if( is_create === undefined ) {
