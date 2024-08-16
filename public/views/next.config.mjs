@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    trailingSlash: true,  
     images: {
-        domains: ['freeaccountingtutorial.com'],
-    },
-    
+        domains: ['codedtag.com'], // Add your domain here
+    },    
 };
 
 export default nextConfig;
