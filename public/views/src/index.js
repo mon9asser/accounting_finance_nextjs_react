@@ -15,6 +15,7 @@ import {
 import "./assets/css/styles.css"
 
 // Components 
+const HomepageComponents = lazy(() => import('./components/home.js').then(module => ({ default: module.HomepageComponents })));
 const PageNotFound = lazy(() => import("./components/404.js").then(module => ({ default: module.PageNotFound })));
 const ContactPage = lazy(() => import('./components/contact.js').then(module => ({ default: module.ContactPage })));
 const AboutPage = lazy(() => import("./components/about.js").then(module => ({ default: module.AboutPage })));
@@ -25,7 +26,7 @@ const TutorialComponent = lazy(() => import('./components/tutorial.js').then(mod
 const ArticleComponent = lazy(() => import('./components/article.js').then(module => ({ default: module.ArticleComponent })));
 const TabComponent = lazy(() => import("./components/tab.js").then(module => ({ default: module.TabComponent })));
 const TabArticleComponent = lazy(() => import("./components/tab-article.js").then(module => ({ default: module.TabArticleComponent })));
-const HomepageComponents = lazy(() => import('./components/home.js').then(module => ({ default: module.HomepageComponents })));
+
 const SearchComponents = lazy(() => import('./components/search.js').then(module => ({ default: module.SearchComponents })));
   
 var WrappApplication = () => {
