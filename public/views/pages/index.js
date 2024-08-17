@@ -3,7 +3,7 @@
 import "@/app/globals.css";
 import Head from "next/head";
 import Image from "next/image";
-
+import parse from 'html-react-parser' 
 import Helper from "./../services/helper";
 import Header from "./../parts/header";
 import Footer from "./../parts/footer";
@@ -13,7 +13,7 @@ import {
 } from "./../services/components"; 
 
 export default function Home({upcoming}){
-    alert('favicons, header and footer, search');
+    //window.alert('favicons, header and footer, search');
     var jsonLdContent = `
             {
                 "@context": "https://schema.org",
@@ -141,7 +141,9 @@ export default function Home({upcoming}){
             </div>
         );
     }
-
+     
+    const header_content = parse(upcoming.settings.header)
+    const footer_content = parse(upcoming.settings.footer)
     return (
        <>
             <Head>
@@ -162,7 +164,7 @@ export default function Home({upcoming}){
                     nonce={upcoming.nonce}
                     dangerouslySetInnerHTML={{ __html: jsonLdContent }}
                 />
-
+                {header_content}
             </Head>
             <Header 
                 settings={upcoming.settings}
@@ -230,6 +232,8 @@ export default function Home({upcoming}){
                     nav_links: upcoming.nav_links, 
                 }}
             />
+
+            
        </>
     )
 }

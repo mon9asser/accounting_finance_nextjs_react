@@ -1,7 +1,46 @@
 import Config from "./config";
- 
+import he from 'he';
+import { createElement } from "react";
 
 class HelperData {
+
+  renderArrayElements_old = (elements) => {
+      
+    if( elements == undefined ) {
+      return []
+    }
+
+    return elements.map((element, index) => { 
+        const { type, props } = element;
+        return createElement(type, { ...props, key: index });
+    });
+
+  }
+
+  renderArrayElements = (elements) => {
+    if (elements === undefined) {
+        return [];
+    }
+
+    return elements.map((element, index) => {
+        const { type, props } = element;
+        
+        // Decode HTML entities in all string props using 'he'
+        const sanitizedProps = { ...props };
+        Object.keys(sanitizedProps).forEach((key) => {
+            if (typeof sanitizedProps[key] === 'string') {
+                console.log(he.decode(sanitizedProps[key]));
+                sanitizedProps[key] = he.decode(sanitizedProps[key]);
+            }
+        });
+
+        return createElement(type, { ...sanitizedProps, key: index });
+    });
+}
+
+
+
+     
 
   generateToken = async () => {
      

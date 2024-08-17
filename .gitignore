@@ -4,6 +4,10 @@
 /node_modules
 /public/admin/node_modules
 /public/views/node_modules 
+/public/next/node_modules 
+/public/next/node_modules 
+/public/___next/node_modules 
+/public/___views/node_modules 
 /.pnp
 .pnp.js
 
