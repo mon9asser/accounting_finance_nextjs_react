@@ -1016,3 +1016,8 @@ ul li a.expanded-a::after{
     padding-top: 0 !important;
     padding-bottom: 0 !important;
  }
+
+ .hero form.set-center {
+    width: 100%;
+    max-width: 500px;
+ }

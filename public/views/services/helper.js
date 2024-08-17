@@ -1,6 +1,7 @@
 import Config from "./config";
 import he from 'he';
 import { createElement } from "react";
+import Script from 'next/script';
 
 class HelperData {
 
@@ -18,25 +19,52 @@ class HelperData {
   }
 
   renderArrayElements = (elements) => {
-    if (elements === undefined) {
-        return [];
-    }
+      // Check if 'elements' is undefined or not an array
+      if (!Array.isArray(elements) || elements.length === 0) {
+          return null; // Return null if elements are undefined or empty
+      }
 
-    return elements.map((element, index) => {
-        const { type, props } = element;
-        
-        // Decode HTML entities in all string props using 'he'
-        const sanitizedProps = { ...props };
-        Object.keys(sanitizedProps).forEach((key) => {
-            if (typeof sanitizedProps[key] === 'string') {
-                console.log(he.decode(sanitizedProps[key]));
-                sanitizedProps[key] = he.decode(sanitizedProps[key]);
-            }
-        });
+      return elements.map((element, index) => {
+          const { type, props } = element;
 
-        return createElement(type, { ...sanitizedProps, key: index });
-    });
-}
+          // Sanitize the props by decoding any HTML entities in string values
+          const sanitizedProps = { ...props };
+          Object.keys(sanitizedProps).forEach((key) => {
+              if (typeof sanitizedProps[key] === 'string') {
+                  sanitizedProps[key] = he.decode(sanitizedProps[key]);
+              }
+          });
+
+          // Handle script tags
+          if (type === 'script') {
+              // If 'src' exists, it's an external script
+              if (sanitizedProps.src) {
+                  return (
+                      <Script
+                          key={index}
+                          src={sanitizedProps.src}
+                          strategy="beforeInteractive" // You can customize the strategy
+                          {...sanitizedProps}
+                      />
+                  );
+              }
+              // If 'children' is defined, it's an inline script
+              else if (sanitizedProps.children) {
+                  return (
+                      <Script
+                          key={index}
+                          strategy="afterInteractive" // You can customize the strategy
+                          dangerouslySetInnerHTML={{ __html: sanitizedProps.children }}
+                      />
+                  );
+              }
+          }
+
+          // For other elements, render as usual
+          return createElement(type, { ...sanitizedProps, key: index });
+      });
+  }
+
 
 
 

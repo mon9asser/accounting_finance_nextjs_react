@@ -13,7 +13,7 @@ import {
 } from "./../services/components"; 
 
 export default function Home({upcoming}){
-    //window.alert('favicons, header and footer, search');
+    //window.alert('favicons, search', redirect, ads.txt, robots.txt, sitemap);
     var jsonLdContent = `
             {
                 "@context": "https://schema.org",
@@ -160,11 +160,11 @@ export default function Home({upcoming}){
                 <meta name="twitter:card" content="summary_large_image"/> 
                 <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
                 <script
-                    type="application/ld+json"
-                    nonce={upcoming.nonce}
+                    type="application/ld+json" 
                     dangerouslySetInnerHTML={{ __html: jsonLdContent }}
                 />
-                {header_content}
+                {header_content}  
+                
             </Head>
             <Header 
                 settings={upcoming.settings}
@@ -233,7 +233,7 @@ export default function Home({upcoming}){
                 }}
             />
 
-            
+            {footer_content}
        </>
     )
 }
