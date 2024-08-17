@@ -6,14 +6,14 @@ import Image from "next/image";
 import parse from 'html-react-parser' 
 import Helper from "./../services/helper";
 import Header from "./../parts/header";
-import Footer from "./../parts/footer";
+import Footer from "./../parts/footer"; 
 import {
     AdCompaignBox,
     SubscribeComponents
 } from "./../services/components"; 
 
 export default function Home({upcoming}){
-    //window.alert('favicons, search', redirect, ads.txt, robots.txt, sitemap);
+    //window.alert( redirect, ads.txt, robots.txt, sitemap);
     var jsonLdContent = `
             {
                 "@context": "https://schema.org",
@@ -150,6 +150,7 @@ export default function Home({upcoming}){
                 <title>{upcoming.settings.site_meta_title}</title>
                 <meta name="description" content={upcoming.settings.site_meta_description}/>
                 <link rel="canonical" href={upcoming.site_url}/>
+ 
                 <meta property="og:locale" content="en_US"/>
                 <meta property="og:type" content="website"/>
                 <meta property="og:title" content={upcoming.settings.site_meta_title}/>

@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useRouter } from 'next/router';
+import { Fragment } from "react";
 
 import Helper from "./helper";
 
@@ -182,9 +183,149 @@ function SubscribeComponents ({is_footer, title, description, camp_data }) {
   )
 }
 
+function TutorialsContent({ blocks, tutorials, ad_camp }){
+  // console.log(ad_camp);
+   var header_count = 0;
+   var end_section = 0;
+
+   return (
+     <Fragment>
+       {blocks?.map(( x, ind ) => {
+         if (x.id !== 'header-level-1') { 
+            
+           switch (x.type) {
+             case 'paragraph':
+               return (
+                 <p
+                   key={x.id}
+                   style={{ textAlign: x?.data?.alignment }}
+                   dangerouslySetInnerHTML={{ __html: x?.data?.text }}
+                 />
+               );
+             case 'code':
+               return (
+                 <Highlight key={x.id} className={x?.data?.language_type}>
+                   {x?.data?.value}
+                 </Highlight>
+               );
+             case 'image':
+               return (
+                 <figure key={x.id}>
+                   <LazyLoadImage
+                     className={x?.data?.stretched ? 'full' : 'half'}
+                     alt={x?.data?.caption}
+                     height={'auto'}
+                     src={x?.data?.file?.url}
+                     width={x?.data?.file?.width}
+                   />
+                 </figure>
+               );
+             case 'header':
+               header_count += 1;
+
+               return <Fragment key={`${x.id}-block-header`}>
+               <this.AdCompaignBox
+                 key={`${x.id}-ad-before`}
+                 position={`before_section_title_${header_count}`}
+                 data={ad_camp}
+               />
+               {React.createElement(
+                 `h${Math.min(Math.max(x?.data?.level, 1), 6)}`,
+                 { key: `${x.id}-heading`, style: { textAlign: x?.data?.alignment } },
+                 x?.data?.text
+               )}
+               <this.AdCompaignBox
+                 key={`${x.id}-ad-after`}
+                 position={`after_section_title_${header_count}`}
+                 data={ad_camp}
+               />
+             </Fragment>;
+             case 'youtubeEmbed':
+               return <LazyLoadYouTube key={x.id} url={x.data?.url} />;
+             case 'delimiter':
+               return <hr key={x.id} />;
+             case 'raw':
+               return (
+                 <Highlight key={x.id} className={'html'}>
+                   {x?.data?.html}
+                 </Highlight>
+               );
+             case 'table':
+               return <ResponsiveTable key={x.id} data={x.data} />;
+             case 'list':
+               return <StyledList key={x.id} data={x.data} />;
+             case 'tutorialsList':
+               if (x.data.selectedValue === '') {
+                 return null;
+               }
+               const filtered = tutorials.filter(
+                 tut => tut.selected_category.id === x.data.selectedValue
+               );
+               if (filtered.length) {
+                 end_section += 1;
+                 return (
+                   <Fragment key={`frage-box-${x.id}`}>
+
+                     <div className="row content-center" key={x.id}>
+                       {filtered.map(item => (
+                         <div
+                           key={item._id}
+                           className="sm-6 md-4 lg-4 text-center p-all-15"
+                         >
+                           <div className="tutorial-box">
+                             {item.tutorial_svg_icon !== '' && (
+                               <i
+                                 className="tutorial-thumbs"
+                                 style={{ background: '#2d4756' }}
+                                 dangerouslySetInnerHTML={{
+                                   __html: item.tutorial_svg_icon,
+                                 }}
+                               />
+                             )}
+                             <h3>
+                               <span>{item.tutorial_title}</span>
+                               {item.duration !== '' && (
+                                 <span className="subtitle">
+                                   Duration:- {item.duration}
+                                 </span>
+                               )}
+                             </h3>
+                             <RouterLink
+                               className="floating-all"
+                               to={`/tutorials/${item.slug}/`}
+                             ></RouterLink>
+                           </div>
+                         </div>
+                       ))}
+                     </div>
+
+                     <this.AdCompaignBox
+                       key={`${x.id}-ad-end-of-section`}
+                       position={`end_of_category_section_${end_section}`}
+                       data={ad_camp}
+                     />
+
+                   </Fragment>
+                 );
+               }
+               return null;
+             default:
+               return null;
+           }
+
+
+           
+
+         }
+         return null;
+       })}
+     </Fragment>
+   );
+}
 
 export {
   SearchComponent,
   AdCompaignBox,
-  SubscribeComponents
+  SubscribeComponents,
+  TutorialsContent
 }

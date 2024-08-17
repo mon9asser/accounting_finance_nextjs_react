@@ -18,6 +18,22 @@ class HelperData {
 
   }
 
+  formatDate = (dateString) => {
+
+      const date = new Date(dateString);
+
+
+      // Format the date components separately
+      const day = date.getDate();
+      const month = date.toLocaleString('en-GB', { month: 'long' });
+      const year = date.getFullYear();
+
+      // Combine them with a comma
+      const formattedDate = `${day} ${month}, ${year}`;
+      
+      return formattedDate;
+
+  }
   renderArrayElements = (elements) => {
       // Check if 'elements' is undefined or not an array
       if (!Array.isArray(elements) || elements.length === 0) {
