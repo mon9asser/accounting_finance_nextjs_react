@@ -2,7 +2,18 @@
 const nextConfig = {
     trailingSlash: true,  
     images: {
-        domains: ['codedtag.com'], // Add your domain here
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'codedtag.com',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'freeaccountingtutorial.com',
+                pathname: '/**',
+            },
+        ],
     },    
 };
 
