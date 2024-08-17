@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useRouter } from 'next/router';
 import { Fragment } from "react";
 
-import Helper from "./helper";
+import { Helper } from "./helper";
 
 function SearchComponent ({searchType}) {
     

@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Fragment } from "react";
 import parse from 'html-react-parser';
-import Helper from "./../services/helper";
+import { Helper } from "./../services/helper";
 import Header from "./../parts/header";
 import Footer from "./../parts/footer";
 import { useRouter } from 'next/router';

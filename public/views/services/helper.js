@@ -1,4 +1,4 @@
-import Config from "./config";
+import Config from "./config.js";
 import he from 'he';
 import { createElement } from "react";
 import Script from 'next/script';
@@ -140,4 +140,4 @@ class HelperData {
 
 var Helper = new HelperData();
 
-export default Helper; 
+export {Helper, HelperData}; 
