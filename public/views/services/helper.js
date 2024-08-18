@@ -121,7 +121,7 @@ class HelperData {
     headers["x-api-key"] = Config.app_key 
     headers["authorization"] = token;
     
-    var requestObject = {
+    var requestObject = { 
       cache: 'force-cache',
       headers,
       method 
@@ -130,8 +130,9 @@ class HelperData {
     if( method.toLowerCase() == 'post') {
       requestObject.body = data; 
     }
-
-    var response = await fetch(`${Config.api}/${api}`, requestObject ); 
+    var url = `${Config.api}/${api}`;
+    
+    var response = await fetch(`${url}`, requestObject ); 
      
     return response;
   }
