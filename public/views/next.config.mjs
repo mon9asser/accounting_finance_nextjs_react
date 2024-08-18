@@ -52,7 +52,7 @@ const nextConfig = {
                   "authorization": token
                 }
             });
-    
+            
             var responseText = await redirect_http.text();
             console.log(responseText)
             //console.log('Redirects Response Text:', responseText);
