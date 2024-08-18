@@ -7,13 +7,16 @@ import parse from 'html-react-parser'
 import { Helper } from "./../services/helper";
 import Header from "./../parts/header";
 import Footer from "./../parts/footer"; 
+import Link from "next/link";
 import {
     AdCompaignBox,
     SubscribeComponents
 } from "./../services/components"; 
+import { notFound } from "next/navigation";
 
 export default function Home({upcoming}){
-    //window.alert( redirect, ads.txt, robots.txt, sitemap);
+     
+    //window.alert( ads.txt, robots.txt, sitemap);
     var jsonLdContent = `
             {
                 "@context": "https://schema.org",
@@ -67,7 +70,7 @@ export default function Home({upcoming}){
                                             }
                                             
                                             <h3>
-                                                <Link target="_blank" to={`${upcoming.site_url}tutorials/${tutorial.slug}/`}>{tutorial.tutorial_title}</Link>
+                                                <Link target="_blank" href={`${upcoming.site_url}tutorials/${tutorial.slug}/`}>{tutorial.tutorial_title}</Link>
                                                 
                                                 {
                                                     tutorial?.selected_category?.name != ''? 
@@ -76,7 +79,7 @@ export default function Home({upcoming}){
                                                 }
                                                 
                                             </h3>
-                                            <Link target="_blank" className="floating-all" to={`${upcoming.site_url}tutorials/${tutorial.slug}/`}></Link>
+                                            <Link target="_blank" className="floating-all" href={`${upcoming.site_url}tutorials/${tutorial.slug}/`}></Link>
                                         </div>
                                     </div>
                                 )
@@ -247,7 +250,8 @@ export async function getServerSideProps() {
       method: "get",
       data: {} 
     })
-     
+        
+    
     var upcoming = {};
   
     if( request.status == 200) {
@@ -260,6 +264,7 @@ export async function getServerSideProps() {
                   site_url = site_url + '/';
               }
         } 
+        
         json.data.settings.site_address = site_url;
   
         if( json.data.settings.site_meta_title != '' ) {
@@ -272,9 +277,7 @@ export async function getServerSideProps() {
         var company_links = json.data.menus?.filter( x=> x.menu_name === "company_nav_links")
         var follow_links = json.data.menus?.filter( x=> x.menu_name === 'follow_nav_links');
         var nav_links = json.data.menus?.filter( x=> x.menu_name === 'tags_nav_links');
-        
-        
-
+         
         upcoming = {
             tutorials: json.data.tutorials,
             posts: json.data.posts, 
