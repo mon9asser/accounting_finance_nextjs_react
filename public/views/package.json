@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 1001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 1001",
     "lint": "next lint"
   },
   "dependencies": {
@@ -14,6 +14,10 @@
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "react-google-recaptcha": "^3.1.0"
+    "react-google-recaptcha": "^3.1.0",
+    "react-share": "^5.1.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

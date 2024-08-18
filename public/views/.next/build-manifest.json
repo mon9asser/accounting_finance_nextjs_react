@@ -15,11 +15,6 @@
     "static/chunks/main-app.js"
   ],
   "pages": {
-    "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
-    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -31,15 +26,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/search": [
+    "/tutorials/[tutorial]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/search.js"
-    ],
-    "/tutorials": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/tutorials.js"
+      "static/chunks/pages/tutorials/[tutorial].js"
     ]
   },
   "ampFirstPages": []

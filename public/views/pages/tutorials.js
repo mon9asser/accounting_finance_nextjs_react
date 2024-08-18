@@ -7,6 +7,7 @@ import { Helper } from "./../services/helper";
 import Header from "./../parts/header";
 import Footer from "./../parts/footer"; 
 import { ServerOffline } from "./../services/components";
+import Script from "next/script";
 import { 
     TutorialsContent
 } from "./../services/components"; 
@@ -66,7 +67,7 @@ export default function Tutorials({upcoming}) {
                 <meta property="og:image" content={upcoming.article_thumbnail_url}/>
                 <meta name="twitter:card" content="summary_large_image"/> 
                 <meta name="twitter:image" content={upcoming.article_thumbnail_url}/>
-                <script
+                <Script
                     type="application/ld+json" 
                     dangerouslySetInnerHTML={{ __html: jsonLdContent }}
                 />

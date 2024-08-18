@@ -5,6 +5,51 @@ import Script from 'next/script';
 
 class HelperData {
 
+  chunkArray(array, chunkSize) {
+    if (chunkSize <= 0) {
+      throw new Error("No Posts found!");
+    }
+    
+    const result = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      const chunk = array.slice(i, i + chunkSize);
+      result.push(chunk);
+    }
+    
+    return result;
+  }
+
+  produceNumber = (number) => {
+      
+    var num = number + 1;
+
+    var string = `0${num}`
+    if( num > 10 ) {
+      string = `${num}`
+    }
+    
+    return string;
+
+  }
+  
+  formatNumber(numer) {
+      var num = parseInt(numer); 
+      if (num >= 1000000000000) {
+          return (num / 1000000000000).toFixed(1).replace(/\.0$/, '') + 'T';
+      } else if (num >= 1000000000) {
+          return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'B';
+      } else if (num >= 1000000) {
+          return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+      } else if (num >= 1000) {
+          return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+      } /*else if (num >= 100) {
+        return num + 'h';
+    }*/ else {
+        
+          return num.toString();
+      }
+  }
+
   renderArrayElements_old = (elements) => {
       
     if( elements == undefined ) {

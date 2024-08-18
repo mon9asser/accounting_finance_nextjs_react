@@ -8,6 +8,7 @@ import Header from "./../parts/header";
 import Footer from "./../parts/footer";
 import { useRouter } from 'next/router';
 import Link from "next/link";
+import Script from "next/script";
 import {
     AdCompaignBox,
     SearchComponent,
@@ -143,7 +144,7 @@ export default function Search({ upcoming }) {
                 <meta property="og:image" content={upcoming.settings.site_thumbnail_url}/>
                 <meta name="twitter:card" content="summary_large_image"/> 
                 <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
-                <script
+                <Script
                     type="application/ld+json" 
                     dangerouslySetInnerHTML={{ __html: jsonLdContent }}
                 />
