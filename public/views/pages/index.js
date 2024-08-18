@@ -10,36 +10,40 @@ import Footer from "./../parts/footer";
 import Link from "next/link";
 import {
     AdCompaignBox,
-    SubscribeComponents
+    SubscribeComponents,
+    ServerOffline
 } from "./../services/components"; 
 import { notFound } from "next/navigation";
 
 export default function Home({upcoming}){
      
-    //window.alert( ads.txt, robots.txt, sitemap);
+    if(!upcoming) {
+        return <ServerOffline/>
+    }
+    
     var jsonLdContent = `
             {
                 "@context": "https://schema.org",
                 "@type": "WebSite",
                 "name": "CodedTag",
-                "url": "${upcoming.site_url}",
+                "url": "${upcoming?.site_url}",
                 "potentialAction": {
                     "@type": "SearchAction",
-                    "target": "${upcoming.site_url}search?q={search_result}",
+                    "target": "${upcoming?.site_url}search?q={search_result}",
                     "query-input": "required name=search_result"
                 },
-                "sameAs": [${upcoming.settings.social_links}],
+                "sameAs": [${upcoming?.settings?.social_links}],
                 "author": {
                     "@type": "Person",
                     "name": "Montasser Mossallem"
                 },
-                "description": "${upcoming.settings.site_meta_description}",
+                "description": "${upcoming?.settings?.site_meta_description}",
                 "publisher": {
                     "@type": "Organization",
-                    "name": "${upcoming.settings.site_name}",
+                    "name": "${upcoming?.settings?.site_name}",
                     "logo": {
                         "@type": "ImageObject",
-                        "url": "${upcoming.settings.site_logo}"
+                        "url": "${upcoming?.settings?.site_logo}"
                     }
                 }
             }
@@ -243,60 +247,68 @@ export default function Home({upcoming}){
 }
 
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
 
-    var request = await Helper.sendRequest({
-      api: "home-page/get",
-      method: "get",
-      data: {} 
-    })
+    try {
+            var request = await Helper.sendRequest({
+                api: "home-page/get",
+                method: "get",
+                data: {} 
+            })
         
-    
-    var upcoming = {};
-  
-    if( request.status == 200) {
-  
-        var json = await request.json(); 
-        var site_url = json.data.settings.site_address;
-        if(site_url) {
-              var url_array = site_url.split('/');
-              if( url_array[url_array.length - 1] != '' ) {
-                  site_url = site_url + '/';
+          if (!request.ok) {
+              throw new Error('Server is offline');
+          }
+      
+          var upcoming = {};
+        
+          if( request.status == 200) {
+        
+              var json = await request.json(); 
+              var site_url = json.data.settings.site_address;
+              if(site_url) {
+                    var url_array = site_url.split('/');
+                    if( url_array[url_array.length - 1] != '' ) {
+                        site_url = site_url + '/';
+                    }
+              } 
+              
+              json.data.settings.site_address = site_url;
+        
+              if( json.data.settings.site_meta_title != '' ) {
+                json.data.settings.site_meta_title = `${json.data.settings.site_meta_title} ${json.data.settings.beside_post_title}`;
               }
-        } 
+              
+              // prepare lists from menu 
+              var nav_left = json.data.menus?.filter( x=> x.menu_name === "main_menu")
+              var nav_right = json.data.menus?.filter( x=> x.menu_name === 'main_nav_right');
+              var company_links = json.data.menus?.filter( x=> x.menu_name === "company_nav_links")
+              var follow_links = json.data.menus?.filter( x=> x.menu_name === 'follow_nav_links');
+              var nav_links = json.data.menus?.filter( x=> x.menu_name === 'tags_nav_links');
+               
+              upcoming = {
+                  tutorials: json.data.tutorials,
+                  posts: json.data.posts, 
+                  settings: json.data.settings,
+                  nav_right,
+                  nav_left,
+                  company_links,
+                  follow_links,
+                  nav_links,
+                  site_url,
+                  menus: json.data.menus,
+                  ads: json.data.ads
+              };
         
-        json.data.settings.site_address = site_url;
-  
-        if( json.data.settings.site_meta_title != '' ) {
-          json.data.settings.site_meta_title = `${json.data.settings.site_meta_title} ${json.data.settings.beside_post_title}`;
-        }
-        
-        // prepare lists from menu 
-        var nav_left = json.data.menus?.filter( x=> x.menu_name === "main_menu")
-        var nav_right = json.data.menus?.filter( x=> x.menu_name === 'main_nav_right');
-        var company_links = json.data.menus?.filter( x=> x.menu_name === "company_nav_links")
-        var follow_links = json.data.menus?.filter( x=> x.menu_name === 'follow_nav_links');
-        var nav_links = json.data.menus?.filter( x=> x.menu_name === 'tags_nav_links');
-         
-        upcoming = {
-            tutorials: json.data.tutorials,
-            posts: json.data.posts, 
-            settings: json.data.settings,
-            nav_right,
-            nav_left,
-            company_links,
-            follow_links,
-            nav_links,
-            site_url,
-            menus: json.data.menus,
-            ads: json.data.ads
-        };
-  
-    }
-    
-    return {
-      props: {upcoming}
+          }
+          
+          return {
+            props: {upcoming}
+          }
+    } catch (error) {
+        context.res.statusCode = 500;
+        return { props: { error: 'Server is offline, please try again later.' } };
     }
   
-  }
+}
     

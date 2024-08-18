@@ -6,7 +6,7 @@ import parse from 'html-react-parser'
 import { Helper } from "./../services/helper";
 import Header from "./../parts/header";
 import Footer from "./../parts/footer"; 
-
+import { ServerOffline } from "./../services/components";
 import { 
     TutorialsContent
 } from "./../services/components"; 
@@ -14,6 +14,10 @@ import {
 
 export default function Tutorials({upcoming}) {
     
+    if(!upcoming) {
+        return <ServerOffline/>
+    }
+
     var jsonLdContent = `
         {
             "@context": "https://schema.org",
@@ -103,81 +107,91 @@ export default function Tutorials({upcoming}) {
     );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
 
-    var request = await Helper.sendRequest({
-        api: "tutorials-page/get?post_type=1&page_template=all_tutorials_by_categories",
-        method: "get",
-        data: {} 
-      })
-       
-      var upcoming = {}; 
-      if( request.status == 200) {
+    try {
+        var request = await Helper.sendRequest({
+            api: "tutorials-page/get?post_type=1&page_template=all_tutorials_by_categories",
+            method: "get",
+            data: {} 
+          })
+           
     
-        var json = await request.json(); 
-
-        if( json.is_error ) {
-            return {
-                notFound: true 
-            };
-        }
-        var this_page = json.data.length? json.data[0]: null; 
-        var social_links = json.social_links || [];
-        var all_tutorials = json.tutorials.filter( x => x.selected_category != null )
-        if( this_page == null ) {
-            return {
-                notFound: true 
-            };
-        }
-        if(json.settings.length) {
-            json.settings = json.settings[0];
-        }
-
-        var site_url = json.settings.site_address;
-        if(site_url) {
-            var url_array = site_url.split('/');
-            if( url_array[url_array.length - 1] != '' ) {
-                site_url = site_url + '/';
+          if (!request.ok) {
+                throw new Error('Server is offline');
             }
-        } 
-        json.settings.site_address = site_url;
-
-        var meta_title =this_page.meta_title + ' ' + json.settings.beside_post_title;
+            
+          var upcoming = {}; 
+          if( request.status == 200) {
         
-        // prepare lists from menu 
-        var nav_left = json.menus?.filter( x=> x.menu_name === "main_menu")
-        var nav_right = json.menus?.filter( x=> x.menu_name === 'main_nav_right');
-        var company_links = json.menus?.filter( x=> x.menu_name === "company_nav_links")
-        var follow_links = json.menus?.filter( x=> x.menu_name === 'follow_nav_links');
-        var nav_links = json.menus?.filter( x=> x.menu_name === 'tags_nav_links');
-        
-        upcoming = {
-            ads: json.ads,
-            menus: json.menus,                 
-            blocks: this_page.blocks,
-            article_thumbnail_url:  this_page.article_thumbnail_url,
-            post_title: this_page.post_title, 
-            meta_title: meta_title,  
-            meta_description: this_page.meta_description, 
-            allow_search_engine: this_page.allow_search_engine, 
-            canonical_url: this_page.canonical_url, 
-            created_date: this_page.created_date, 
-            page_template: this_page.page_template, 
-            slug: this_page.slug, 
-            updated_date: this_page.updated_date, 
-            settings: json.settings,
-            social_links: social_links?.map(x => `"${x.social_link}"`),
-            tutorials: all_tutorials,
-            nav_right,
-            nav_left,
-            company_links,
-            follow_links,
-            nav_links,
-            site_url,
-          };
-      }
-      
-      return {
-        props: {upcoming}
-      }
+            var json = await request.json(); 
+    
+            if( json.is_error ) {
+                return {
+                    notFound: true 
+                };
+            }
+            var this_page = json.data.length? json.data[0]: null; 
+            var social_links = json.social_links || [];
+            var all_tutorials = json.tutorials.filter( x => x.selected_category != null )
+            if( this_page == null ) {
+                return {
+                    notFound: true 
+                };
+            }
+            if(json.settings.length) {
+                json.settings = json.settings[0];
+            }
+    
+            var site_url = json.settings.site_address;
+            if(site_url) {
+                var url_array = site_url.split('/');
+                if( url_array[url_array.length - 1] != '' ) {
+                    site_url = site_url + '/';
+                }
+            } 
+            json.settings.site_address = site_url;
+    
+            var meta_title =this_page.meta_title + ' ' + json.settings.beside_post_title;
+            
+            // prepare lists from menu 
+            var nav_left = json.menus?.filter( x=> x.menu_name === "main_menu")
+            var nav_right = json.menus?.filter( x=> x.menu_name === 'main_nav_right');
+            var company_links = json.menus?.filter( x=> x.menu_name === "company_nav_links")
+            var follow_links = json.menus?.filter( x=> x.menu_name === 'follow_nav_links');
+            var nav_links = json.menus?.filter( x=> x.menu_name === 'tags_nav_links');
+            
+            upcoming = {
+                ads: json.ads,
+                menus: json.menus,                 
+                blocks: this_page.blocks,
+                article_thumbnail_url:  this_page.article_thumbnail_url,
+                post_title: this_page.post_title, 
+                meta_title: meta_title,  
+                meta_description: this_page.meta_description, 
+                allow_search_engine: this_page.allow_search_engine, 
+                canonical_url: this_page.canonical_url, 
+                created_date: this_page.created_date, 
+                page_template: this_page.page_template, 
+                slug: this_page.slug, 
+                updated_date: this_page.updated_date, 
+                settings: json.settings,
+                social_links: social_links?.map(x => `"${x.social_link}"`),
+                tutorials: all_tutorials,
+                nav_right,
+                nav_left,
+                company_links,
+                follow_links,
+                nav_links,
+                site_url,
+              };
+          }
+          
+          return {
+            props: {upcoming}
+          }
+    } catch (error) {
+        context.res.statusCode = 500;
+        return { props: { error: 'Server is offline, please try again later.' } };
+    }
 }

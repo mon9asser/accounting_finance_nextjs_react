@@ -1021,3 +1021,30 @@ ul li a.expanded-a::after{
     width: 100%;
     max-width: 500px;
  }
+
+ @media only screen and (min-width: 500px) {
+    .hero form.set-center {
+        width: 430px;
+        max-width: 100%;
+     }
+ }
+
+ .error-500 { 
+    width: 500px;
+    max-width: 100%;
+    padding: 20px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 120px;
+ }
+
+ .error-500 h1 {
+    font-weight: 100;
+    color: #b9355e;
+    font-size: 40px;
+ }
+
+ .error-500 h2 {
+    font-weight: 100;
+    margin-bottom: 20px;
+ }

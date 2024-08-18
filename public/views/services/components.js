@@ -1,8 +1,24 @@
 import { useState, useRef } from "react";
 import { useRouter } from 'next/router';
 import { Fragment } from "react";
-
+import Link from "next/link";
 import { Helper } from "./helper";
+import Head from "next/head";
+
+function ServerOffline() {
+  return (
+    <>
+      <Head>
+        <title>500: Server Offline</title>
+      </Head>
+      <div className="error-500">
+        <h1>500</h1>
+        <h2>Server Offline</h2>
+        <p>When the server goes offline, it disrupts access to the website. This issue can stem from various causes, including maintenance, technical failures, or unexpected traffic spikes.</p>
+      </div>
+    </>
+  );
+}
 
 function SearchComponent ({searchType}) {
     
@@ -327,5 +343,6 @@ export {
   SearchComponent,
   AdCompaignBox,
   SubscribeComponents,
-  TutorialsContent
+  TutorialsContent,
+  ServerOffline
 }

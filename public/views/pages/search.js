@@ -11,11 +11,17 @@ import Link from "next/link";
 import {
     AdCompaignBox,
     SearchComponent,
-    SubscribeComponents
+    SubscribeComponents,
+    ServerOffline
 } from "./../services/components";
 
 export default function Search({ upcoming }) {
     
+    if(!upcoming) {
+        return <ServerOffline/>
+    }
+
+
     const header_content = parse(upcoming.settings.header)
     const footer_content = parse(upcoming.settings.footer)
      
@@ -175,83 +181,90 @@ export default function Search({ upcoming }) {
 }
 
 export async function getServerSideProps(context) {
-    const router = context.resolvedUrl;
-    var upcoming = {};
-    var query_for = '';
-    // Check if the URL contains '?q='
-    const hasQueryParam = router.includes('?q=');
+    try {
+        const router = context.resolvedUrl;
+        var upcoming = {};
+        var query_for = '';
+        // Check if the URL contains '?q='
+        const hasQueryParam = router.includes('?q=');
 
-    var query = `search?q=''`
-    if( hasQueryParam ) {
-        const searchQuery = hasQueryParam ? router.split('?q=')[1] : ''; 
-        query =  `search?q=${searchQuery}`;
-        query_for = searchQuery;
-    }
+        var query = `search?q=''`
+        if( hasQueryParam ) {
+            const searchQuery = hasQueryParam ? router.split('?q=')[1] : ''; 
+            query =  `search?q=${searchQuery}`;
+            query_for = searchQuery;
+        }
 
 
 
-    // Default to an empty string if no query param
- 
-    const request = await Helper.sendRequest({
-        api: query,
-        method: "get",
-        data: {}
-    });
-
+        // Default to an empty string if no query param
     
+        const request = await Helper.sendRequest({
+            api: query,
+            method: "get",
+            data: {}
+        });
 
-    if (request.status === 200) {
-        const json = await request.json();
-
-        if( json.settings.length ) {
-            json.settings = json.settings[0];
+        if (!request.ok) {
+            throw new Error('Server is offline');
         }
 
-        let site_url = json.settings.site_address || null; // Set to null if undefined
+        if (request.status === 200) {
+            const json = await request.json();
 
-        if (site_url) {
-            const url_array = site_url.split('/');
-            if (url_array[url_array.length - 1] !== '') {
-                site_url = `${site_url}/`;
+            if( json.settings.length ) {
+                json.settings = json.settings[0];
             }
+
+            let site_url = json.settings.site_address || null; // Set to null if undefined
+
+            if (site_url) {
+                const url_array = site_url.split('/');
+                if (url_array[url_array.length - 1] !== '') {
+                    site_url = `${site_url}/`;
+                }
+            }
+
+            
+
+            json.settings.site_address = site_url;
+
+            if (json.settings.site_meta_title !== '') {
+                json.settings.site_meta_title = `${json.settings.site_meta_title} ${json.settings.beside_post_title}`;
+            }
+
+            // prepare lists from menu 
+            var nav_left = json.menus.filter( x=> x.menu_name === "main_menu")
+            var nav_right = json.menus.filter( x=> x.menu_name === 'main_nav_right');
+            var company_links = json.menus.filter( x=> x.menu_name === "company_nav_links")
+            var follow_links = json.menus.filter( x=> x.menu_name === 'follow_nav_links');
+            var nav_links = json.menus.filter( x=> x.menu_name === 'tags_nav_links');
+            
+            
+            upcoming = {
+                results: json.data,
+                settings: json.settings,
+                menus: json.menus,
+                site_url: site_url, 
+                nav_right,
+                nav_left,
+                company_links,
+                follow_links,
+                nav_links,
+                site_url,
+                result_title: query_for, // This will be an empty string if no query param is present
+                ads: json.ads
+            };
         }
 
-        
+        // Ensure site_url is defined as null if it's undefined
+        upcoming.site_url = upcoming.site_url || null;
 
-        json.settings.site_address = site_url;
-
-        if (json.settings.site_meta_title !== '') {
-            json.settings.site_meta_title = `${json.settings.site_meta_title} ${json.settings.beside_post_title}`;
-        }
-
-        // prepare lists from menu 
-        var nav_left = json.menus.filter( x=> x.menu_name === "main_menu")
-        var nav_right = json.menus.filter( x=> x.menu_name === 'main_nav_right');
-        var company_links = json.menus.filter( x=> x.menu_name === "company_nav_links")
-        var follow_links = json.menus.filter( x=> x.menu_name === 'follow_nav_links');
-        var nav_links = json.menus.filter( x=> x.menu_name === 'tags_nav_links');
-        
-        
-        upcoming = {
-            results: json.data,
-            settings: json.settings,
-            menus: json.menus,
-            site_url: site_url, 
-            nav_right,
-            nav_left,
-            company_links,
-            follow_links,
-            nav_links,
-            site_url,
-            result_title: query_for, // This will be an empty string if no query param is present
-            ads: json.ads
+        return {
+            props: { upcoming }
         };
+    } catch (error) {
+        context.res.statusCode = 500;
+        return { props: { error: 'Server is offline, please try again later.' } };
     }
-
-    // Ensure site_url is defined as null if it's undefined
-    upcoming.site_url = upcoming.site_url || null;
-
-    return {
-        props: { upcoming }
-    };
 }

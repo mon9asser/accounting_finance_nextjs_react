@@ -1,7 +1,7 @@
   
 module.exports = {
     //db_name:"freeaccountingtutorial_datab",
-    db_name:"aaa_codedtag",
+    db_name:"aaa_codedtag", // localhost
     domain:"freeaccountingtutorial.com",
     name:"freeaccountingtutorial",
     index:1,

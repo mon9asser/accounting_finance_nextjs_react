@@ -24,6 +24,47 @@ const nextConfig = {
         ],
     }, 
     
+    async rewrites() {
+        return [
+          {
+            source: '/sitemap_articles.xml',
+            destination: '/api/sitemap_articles',
+          },
+          {
+            source: '/sitemap_pages.xml',
+            destination: '/api/sitemap_pages',
+          },
+          {
+            source: '/sitemap_users.xml',
+            destination: '/api/sitemap_users',
+          },
+          {
+            source: '/sitemap_tutorials.xml',
+            destination: '/api/sitemap_tutorials',
+          }, 
+          
+          {
+            source: '/sitemap_tabs.xml',
+            destination: '/api/sitemap_tabs',
+          }, 
+
+          {
+            source: '/sitemap_index.xml',
+            destination: '/api/sitemap_index',
+          }, 
+
+          {
+            source: '/robots.txt',
+            destination: '/api/robots',
+          }, 
+          
+          {
+            source: '/ads.txt',
+            destination: '/api/ads',
+          }, 
+        ];
+    },
+    
     async redirects() {
         var api_key = 'qwe#r$s%s&d*r!w*e((f))d-f`werh14445`4rt5`4ert5`4rt31645k132v132';
     
@@ -54,7 +95,7 @@ const nextConfig = {
             });
             
             var responseText = await redirect_http.text();
-            console.log(responseText)
+             
             //console.log('Redirects Response Text:', responseText);
     
             // Check if responseText is valid JSON
