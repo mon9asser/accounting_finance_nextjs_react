@@ -1080,7 +1080,7 @@ var ArticleContentSingle = ({blocks, helper}) => {
           } else if (x.type == 'header') { 
 
             return ( 
-              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, name:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, x?.data?.text)
+              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, x?.data?.text)
             )
 
           } else if (x.type == 'youtubeEmbed') {
@@ -1324,6 +1324,79 @@ var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, t
   return (itemComponents);
 }
 
+const TableOfContent = ({ data }) => {
+  const [expandorCheckbox, setExpandorCheckbox] = useState(false);
+
+  useEffect(() => {
+    const expandCollapseTblContent = () => {
+      const id = document.querySelector('#article-tbl-of-content');
+      const handler = document.querySelector('#table-of-content-toggler');
+
+      if (id?.classList.contains('expanded')) {
+        id.classList.remove('expanded');
+        handler.classList.remove('tbl-arrow');
+      } else {
+        id?.classList.add('expanded');
+        handler?.classList.add('tbl-arrow');
+      }
+    };
+
+    const handler = document.querySelector('#table-of-content-toggler');
+    if (handler) {
+      handler.addEventListener('click', expandCollapseTblContent);
+    }
+
+    return () => {
+      if (handler) {
+        handler.removeEventListener('click', expandCollapseTblContent);
+      }
+    };
+  }, []);
+
+  const handleSmoothScroll = (e, href) => {
+    e.preventDefault();
+
+     
+    const targetElement = document.querySelector( '#'+ href);
+     
+    if (targetElement) {
+      
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div
+      id='article-tbl-of-content'
+      className={`content-tble-mobile-block tble-content ${expandorCheckbox ? 'expanded' : ''}`}
+    >
+      <ul className='block-list custom-aside-tuts list-items'>
+        <li className='has-slideitem' style={{ background: '#f9f9f9' }}>
+          <b className='content-table-head-title'>Table of Content</b>
+          <ul className='slideitem' style={{ display: 'block' }}>
+            {data.map((x, index) => (
+              <li key={index}>
+                <a
+                  href={x.href ? '#' + x.href : '#'}
+                  onClick={(e) => handleSmoothScroll(e, x.href)}
+                >
+                  {x.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </li>
+      </ul>
+      <label
+        className={'tble-content-handler expander'}
+        id='table-of-content-toggler'
+      ></label>
+    </div>
+  );
+};
+
+
+/*
 var TableOfContent = ({data}) => {
 
   var [expandor_checkbox, expandor_checkbox_change] = useState(false);
@@ -1345,14 +1418,14 @@ var TableOfContent = ({data}) => {
             <li className="has-slideitem" style={{background: "#f9f9f9"}}>
                 <b className='content-table-head-title'>Table of Content</b>
                 <ul className="slideitem" style={{display: "block"}}>
-                  {data.map((x, index) => <li key={index}><Link href={x.href == undefined ? '': x.href} smooth={true} duration={500}>{x.title}</Link></li>)} 
+                  {data.map((x, index) => <li key={index}><Link href={x.href == undefined ? '#': x.href} smooth={'true'} duration={500}>{x.title}</Link></li>)} 
                 </ul>
             </li>
         </ul>
         <label className={"tble-content-handler expander"} id='table-of-content-toggler' onClick={expand_collapse_tbl_content}></label>
     </div>
   )
-}
+}*/
 export {
   SearchComponent,
   AdCompaignBox,

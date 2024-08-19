@@ -310,11 +310,9 @@ export async function getServerSideProps(context) {
                 }
             } 
             json.data.settings.site_address = site_url;
-
+             
             if( json.data.settings?.beside_post_title != "") { 
-                if( json.post?.meta_title) {
-                    json.post.meta_title = json.post.meta_title + " " + json.data.settings?.beside_post_title;
-                }
+                json.data.post.meta_title = json.data.post.meta_title + " " + json.data.settings?.beside_post_title;
             }
 
             // prepare lists from menu 

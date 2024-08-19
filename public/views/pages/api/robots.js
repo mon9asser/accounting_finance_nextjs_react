@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     });
 
     var response = await reqs.json();
-
+     
     if (!response.success || !response.data || typeof response.data.content !== 'string') {
       return res.status(400).json({ error: "Invalid JSON format" });
     }
