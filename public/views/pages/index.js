@@ -168,7 +168,7 @@ export default function Home({upcoming}){
                 <meta property="og:image" content={upcoming.settings.site_thumbnail_url} />
                 <meta name="twitter:card" content="summary_large_image"/> 
                 <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
-                <Script
+                <script
                     type="application/ld+json" 
                     dangerouslySetInnerHTML={{ __html: jsonLdContent }}
                 />
@@ -194,6 +194,7 @@ export default function Home({upcoming}){
                                 <SubscribeComponents  
                                     camp_data={upcoming.ads}
                                     is_footer={false}
+                                    settings={upcoming.settings}
                                     title={upcoming.settings?.banner_site_title}
                                     description={upcoming.settings?.banner_site_description}
                                 />
@@ -205,10 +206,11 @@ export default function Home({upcoming}){
                                 <div className="lg-5 md-5 sm-12 flexbox content-center items-center column-direction p-all-15">
                                     <figure> 
                                         <Image
+                                            crossOrigin="anonymous"
                                             className={'half'}
                                             alt={upcoming.settings.banner_site_title}
-                                            height={'auto'} 
-                                            width={'320px'}
+                                            height={200} 
+                                            width={320}
                                             src={upcoming.settings.banner_image_url}  
                                         /> 
                                     </figure>
