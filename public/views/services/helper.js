@@ -5,6 +5,13 @@ import Script from 'next/script';
 
 class HelperData {
 
+  generate_slugs = (text) => {
+    return text
+      .toLowerCase()          // Convert all characters to lowercase
+      .replace(/\s+/g, '-')   // Replace all spaces with hyphens
+      .replace(/[^\w-]+/g, ''); // Remove all non-word characters except hyphens
+  }
+  
   chunkArray(array, chunkSize) {
     if (chunkSize <= 0) {
       throw new Error("No Posts found!");
@@ -128,7 +135,24 @@ class HelperData {
 
 
 
+  formated_published_date = (isoString) => {
+    const date = new Date(isoString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
+    const textValue = date.toLocaleDateString('en-US', options);
+    const datetimeValue = date.toISOString();
+
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    
+    return {
+        value: datetimeValue,
+        text: `${monthNames[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`
+    };
+  }
      
 
   generateToken = async () => {

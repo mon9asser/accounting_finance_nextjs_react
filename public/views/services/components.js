@@ -4,7 +4,8 @@ import { Fragment } from "react";
 import Link from "next/link";
 import { Helper } from "./helper";
 import Head from "next/head";
-
+import Highlight from 'react-highlight'
+import Image from "next/image";
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -551,6 +552,59 @@ var GenerateTutorialContent_2 = ({ data, upcoming, built_url, ad_camp }) => {
 
 }
 
+const StyledList = ({ data }) => {
+  const { style, items } = data;
+
+  return (
+      <div className="list-container">
+          {style === 'ordered' ? (
+              <ol>
+                  {items.map((item, index) => (
+                      <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
+                  ))}
+              </ol>
+          ) : (
+              <ul>
+                  {items.map((item, index) => (
+                      <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
+                  ))}
+              </ul>
+          )}
+      </div>
+  );
+};
+
+const ResponsiveTable = ({ data }) => {
+  const { withHeadings, content } = data;
+
+  return (
+      <div className="table-container">
+          <table className="table">
+              <thead>
+                  {withHeadings && (
+                      <tr>
+                          {content[0].map((heading, index) => (
+                              <th key={index}>{heading}</th>
+                          ))}
+                      </tr>
+                  )}
+              </thead>
+              <tbody>
+                  {content.slice(withHeadings ? 1 : 0).map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                          {row.map((cell, cellIndex) => (
+                              <td key={cellIndex} data-label={withHeadings ? content[0][cellIndex] : `Column ${cellIndex + 1}`}>
+                                  {cell}
+                              </td>
+                          ))}
+                      </tr>
+                  ))}
+              </tbody>
+          </table>
+      </div>
+  );
+}; 
+
 var TutorialsList = ({ index, data, chapter_title, built_url }) => {
       
   return ( 
@@ -602,10 +656,10 @@ function TutorialsContent({ blocks, tutorials, ad_camp }){
              case 'image':
                return (
                  <figure key={x.id}>
-                   <LazyLoadImage
+                   <Image
                      className={x?.data?.stretched ? 'full' : 'half'}
                      alt={x?.data?.caption}
-                     height={'auto'}
+                     height={250}
                      src={x?.data?.file?.url}
                      width={x?.data?.file?.width}
                    />
@@ -957,6 +1011,348 @@ var SocialShare = ({platforms, url, title, radius, size, width, height}) => {
 }
 
 
+var ArticleContentSingle = ({blocks, helper}) => {
+      
+  var subheadings = blocks.filter(x => x.type == 'header' && x.id != 'header-level-1' ).map(x => ({
+    href: Helper.generate_slugs(x?.data?.text),
+    title: x?.data?.text
+  }));
+
+  var settings = null, ads = null; 
+  if( helper != undefined ) {
+    settings = helper.settings;
+    ads = helper.ads;
+  }
+  
+  if( ads == null ) ads = [];
+
+  var words_every = settings?.ads_between_texts_every_words? settings.ads_between_texts_every_words: 500;
+
+  var text_counter = 0;
+  var ad_counter = 0;
+  return(
+    <>
+      {blocks?.map((x, index) => {
+
+        if(x.id != 'header-level-1') {
+           
+          // return <TableOfContent/>
+
+          if( x.type == 'paragraph') { 
+            
+            text_counter += x.words_counts
+            
+
+            var ad_campaign_element = '';
+            if( text_counter >= words_every ) {
+              ad_counter++; 
+              ad_campaign_element = <AdCompaignBox data={ads} position={`inside_content_${ad_counter}`}/>;
+              text_counter = 0;
+            }
+            
+            return (
+              <Fragment key={x.id}> 
+                <p style={{textAlign:x?.data?.alignment}} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>
+                { ad_campaign_element }
+                {
+                  index == 1 && subheadings.length ? <TableOfContent data={subheadings}/>: ""
+                }
+                
+              </Fragment>
+            )
+          } else if (x.type == 'code' ) {
+            return (
+              <Highlight key={x.id} className={x?.data?.language_type}>
+                {x?.data?.value}
+              </Highlight>
+            )
+          } else if (x.type == 'image') {
+            return (
+              <figure key={x.id}> 
+                    <Image
+                        className={x?.data?.stretched ? 'full': 'half'}
+                        alt={x?.data?.caption}
+                        height={250}
+                        src={x?.data?.file?.url} // use normal <img> attributes as props
+                        width={x?.data?.file?.width} /> 
+              </figure>
+            )
+          } else if (x.type == 'header') { 
+
+            return ( 
+              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, name:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, x?.data?.text)
+            )
+
+          } else if (x.type == 'youtubeEmbed') {
+            return (<LazyLoadYouTube key={x.id} url={x.data?.url} height='500'/>);
+          } else if (x.type == 'delimiter') {
+            return (<hr key={x.id} />)
+          } else if (x.type == 'raw') {
+            return (
+              <Highlight key={x.id} className={'html'}>
+                {x?.data?.html}
+              </Highlight>
+            )
+          } else if (x.type == 'table') {
+            return <ResponsiveTable key={x.id} data={x.data} />
+          } else if (x.type == 'list') {
+            return <StyledList key={x.id} data={x.data} />
+          } 
+
+        } 
+
+      })}
+    </>
+  );     
+}
+
+var NextPrevPagination = ({site_url, tutorial_slug, type, data, current_post_slug}) => {
+     
+      
+  var posts = data; 
+  if(type == 'chapters') {
+    posts = data.map(x => x.posts).flat();
+  }
+
+  // get current index;
+  var index = posts.findIndex( x => x.slug == current_post_slug );
+
+  
+  var nex_index = index + 1;
+  var prev_index = index - 1;
+
+
+  var next = posts[nex_index];
+  var prev = posts[prev_index]
+  
+  var next_link = next == undefined ? '':`${site_url}tutorials/${tutorial_slug}/${next.slug}/`;
+  var prev_link = prev == undefined ? '':`${site_url}tutorials/${tutorial_slug}/${prev.slug}/`;
+
+  return (
+    <div className="flexbox space-between pagination">
+        
+        {
+          
+          ( prev == undefined ) ? '':
+        
+        <Link href={prev_link} className="flexbox direction-row items-center hover-to-left">
+            <i className="left-arrow-pagin"></i>
+            <span>
+                <span className="d-none d-sm-block">{prev.post_title}</span> 
+                <span className="d-block d-sm-none">Prev</span> 
+            </span>
+        </Link> 
+        } 
+
+        {
+          
+          ( next == undefined ) ? '':
+          <Link href={next_link} className="flexbox direction-row items-center hover-to-right auto-right">
+              <span>
+                  <span className="d-none d-sm-block">{next.post_title}</span> 
+                  <span className="d-block d-sm-none">Next</span>
+              </span>
+              <i className="right-arrow-pagin"></i>
+          </Link> 
+        }
+    </div>
+  );
+}
+
+var Breadcrumbs = ({data}) => {
+  return (
+    <ul className="breadcrumbs">
+        {data.map((x, index) => <li key={index} className='sub-title'><Link href={x.url}>{x.title}</Link></li>)}
+    </ul>
+  );
+}
+
+var ArticleSidebar = ({type, data, site_url, tutorial_slug, current_post_slug, tab_slug, helper}) => {
+
+  var settings = null, ads = []; 
+  if( helper != undefined ) {
+    ads = helper.ads
+    settings = helper.settings
+  } 
+
+  var collapsed_item = (e, id) => {
+    
+    e.preventDefault();
+
+    var doc_id = document.querySelector(`#item-${id}`); 
+    var anchor = document.querySelector(`#anchor-${id}`); 
+    
+
+    if( doc_id.classList.contains('expanded') ) {
+      anchor.classList.remove('expanded-a')
+      doc_id.classList.remove('expanded'); 
+    } else {
+      doc_id.classList.add('expanded');
+      anchor.classList.add('expanded-a')
+    }
+      
+  }
+
+  var posts = [];
+  if( type == 'posts' ) {
+    if(data.length)
+      posts = Helper.chunkArray(data, settings.ads_between_navs_every_list ) 
+  }
+
+  var chapters = []; 
+  if( type == 'chapters' ) {
+    if(data.length)
+      chapters = Helper.chunkArray(data, settings.ads_between_navs_every_list ) 
+  } 
+
+  var elem_list = 0;
+
+
+  
+  var itemComponents = (
+    <>
+
+      {/* Chapters */}
+      {type === 'chapters' ? 
+        // split chapters according to ads 
+         
+
+        chapters.map( (chapterData, indexer) => {
+          
+          elem_list++;
+
+          return (
+            <Fragment key={indexer}>
+              <ul key={indexer} className="block-list custom-aside-tuts">
+
+                {chapterData.map(chapter => {
+                  var link_url = `${site_url}tutorials/${tutorial_slug}/`;
+                  if( tab_slug != undefined ) {
+                    link_url = `${link_url}t/${tab_slug}/`
+                  }
+                  
+                  var is_expaned = chapter.posts.findIndex( x => x.slug == current_post_slug) != -1;
+
+                  return (
+                    <Fragment key={chapter._id}>
+                      {chapter.chapter_title !== "" ? (
+
+                        <>
+                          <li className={`${chapter.posts.length ? 'has-slideitem' : ''}`}>
+                            <Link className={` ${is_expaned ? 'expanded-a': ''}`} id={`anchor-${chapter._id}`} onClick={e => collapsed_item(e, `${chapter._id}`)} href="#">{chapter.chapter_title}</Link>
+                            {chapter.posts.length ? (
+                              <ul id={`item-${chapter._id}`} className={`collapsible list-items ${is_expaned ? 'expanded': ''}`}>
+                                {chapter.posts.map(x => (
+                                  <li key={x._id}>
+                                    <Link className={current_post_slug == x.slug ? 'selected_tab': ''} href={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                                  </li>
+                                ))} 
+                                
+                              </ul>
+                            ) : null}
+                          </li> 
+                        </>
+                        
+                      ) : (
+                        <li>
+                          <ul className="block-list custom-aside-tuts list-items">
+                            {chapter.posts.map(x => (
+                              <li key={x._id}>
+                                <Link className={current_post_slug == x.slug ? 'selected_tab': ''} href={`${link_url}${x.slug}/`}>{x.post_title}</Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
+                      )}
+                    </Fragment>
+                  );
+                })}
+
+              </ul>
+               
+              <AdCompaignBox data={ads} position={`in_sidebar_${elem_list}`}/>
+                
+            </Fragment>
+          )
+
+        })
+       
+      : ''}
+      
+      {/* Posts */} 
+      {
+        (type == 'posts') ?
+        posts.map( (x, index) =>{
+          
+          if(  x.length >= settings.ads_between_navs_every_list )
+            elem_list++;
+
+          return  (
+            <Fragment key={index} >
+              <ul className="block-list custom-aside-tuts list-items">
+                {
+                  x.map(post => {
+
+                    var link_url =  `${site_url}tutorials/${tutorial_slug}/`; 
+                    if( tab_slug != undefined ) {
+                      link_url = `${link_url}t/${tab_slug}/`
+                    }
+                    
+                    return (
+                      <Fragment key={post._id}>
+                        <li key={post._id}>
+                          <Link className={current_post_slug == post.slug ? 'selected_tab': ''} href={`${link_url}${post.slug}/`}>{post.post_title}</Link>
+                        </li>
+                      </Fragment>
+                    );
+                  })
+                }
+              </ul>
+
+              {
+                x.length >= settings.ads_between_navs_every_list ? <AdCompaignBox data={ads} position={`in_sidebar_${elem_list}`}/>: ''
+              }
+            </Fragment>
+          )
+        }): ''
+      }
+    </>
+  );
+  
+
+  
+  return (itemComponents);
+}
+
+var TableOfContent = ({data}) => {
+
+  var [expandor_checkbox, expandor_checkbox_change] = useState(false);
+  var expand_collapse_tbl_content = () => {
+      var id = document.querySelector('#article-tbl-of-content');
+      var handler = document.querySelector('#table-of-content-toggler');
+
+      if(id.classList.contains('expanded')) {
+          id.classList.remove('expanded')
+          handler.classList.remove('tbl-arrow')
+      } else {
+          id.classList.add('expanded')
+          handler.classList.add('tbl-arrow')
+      }
+  } 
+  return (
+    <div id='article-tbl-of-content' className={`content-tble-mobile-block tble-content ${expandor_checkbox ? 'expanded': ''}`}>
+        <ul className="block-list custom-aside-tuts list-items">
+            <li className="has-slideitem" style={{background: "#f9f9f9"}}>
+                <b className='content-table-head-title'>Table of Content</b>
+                <ul className="slideitem" style={{display: "block"}}>
+                  {data.map((x, index) => <li key={index}><Link href={x.href == undefined ? '': x.href} smooth={true} duration={500}>{x.title}</Link></li>)} 
+                </ul>
+            </li>
+        </ul>
+        <label className={"tble-content-handler expander"} id='table-of-content-toggler' onClick={expand_collapse_tbl_content}></label>
+    </div>
+  )
+}
 export {
   SearchComponent,
   AdCompaignBox,
@@ -966,5 +1362,9 @@ export {
   GenerateTutorialContent_1,
   GenerateTutorialContent_2,
   SocialShare,
-  FeedBackBlock
+  FeedBackBlock,
+  ArticleSidebar,
+  Breadcrumbs,
+  NextPrevPagination,
+  ArticleContentSingle
 }
