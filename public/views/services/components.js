@@ -147,6 +147,54 @@ function AdCompaignBox({ position, data, classes }) {
   return <div className={combinedClasses} ref={adRef}></div>;
 };
 
+var GenerateTutorialContent_tab = ({ data, upcoming, built_url, ad_camp }) => {
+  // Split the data by the delimiter "|"
+  const parts = data.split('|').map(part => part.trim());
+
+  // Process the parts to create the appropriate elements
+  return (
+    <>
+      {parts.map((part, index) => {
+        // YouTube shortcode
+        if (part.startsWith('[youtube')) {
+          const src = part.match(/src="([^"]+)"/)[1];
+          return (
+            <Fragment key={index}>
+                <div className="mt-25">
+                  <LazyLoadYouTube cls="ifram-tut-youtube" url={src} />
+                </div>
+
+                <AdCompaignBox data={ad_camp} position={'after_youtube_video_content_1'}/> 
+            </Fragment>
+          );
+        }
+        // Headline shortcodes from h1 to h6
+        else if (part.match(/^\[h[1-6]/)) {
+          const tag = part.match(/^\[h([1-6])/)[1];
+          const content = part.replace(/^\[h[1-6]\]/, '').trim();
+          const TagName = `h${tag}`;
+          return <TagName key={index} className="tutorial-subheadline">{content}</TagName>;
+        }
+        // Chapters and posts shortcode
+        else if (part.startsWith('[chapters-posts]')) {
+          if(upcoming != undefined )
+            return <TutorialLinks key={index} ad_camp={ad_camp} built_url={built_url} upcoming={upcoming} />;
+        } 
+        // Default case: plain paragraph
+        else {
+          return (
+            <p key={index} className="tutorial-description text-center">
+              {part}
+            </p>
+          );
+        }
+      })}
+
+      <AdCompaignBox data={ad_camp} position={'after_tutorial_description_1'}/>
+    </>
+  );
+}
+
 var FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
 
   feeadback_title = feeadback_title == undefined ? 'Did you find this tutorial useful?': feeadback_title;
@@ -1439,5 +1487,6 @@ export {
   ArticleSidebar,
   Breadcrumbs,
   NextPrevPagination,
-  ArticleContentSingle
+  ArticleContentSingle,
+  GenerateTutorialContent_tab
 }

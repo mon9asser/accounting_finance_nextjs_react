@@ -1,3 +1,17 @@
+terms-and-conditions.js
+privacy-policy.js
+contact.js
+about.js
+
+tab-article.js
+
+- ✔ tab.js
+- ✔ tutorials.js
+- ✔ tutorial.js
+- ✔ search.js
+- ✔ home.js
+- ✔ article.js
+
 - ✖ Working with google analytics fields
 - ✖ Make option in settings for api key of google analytics
 

@@ -246,9 +246,7 @@ export async function getServerSideProps(context) {
             method: "get",
             data: {}
         })
-
         
-
         if (!request.ok) {
             throw new Error('Server is offline');
         }
@@ -259,8 +257,7 @@ export async function getServerSideProps(context) {
             
             var json = await request.json();  
               
-            if( json.is_error && !json.data.length ) {
-                console.log("data here")
+            if( json.is_error && !json.data.length ) { 
                 return {
                     notFound: true
                 }
