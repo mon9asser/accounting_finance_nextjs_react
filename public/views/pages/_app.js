@@ -10,13 +10,13 @@ const poppins = Poppins({
 export default function MyApp({ Component, pageProps }) {
   return (
     <div className={poppins.className}>
+        <Component {...pageProps} />
         <Head>
             <link rel="manifest" href="/icons/manifest.json" />
             <meta name="theme-color" content="#000000" />
             <link rel="icon" href="/icons/favicon.ico" />
             <link rel="apple-touch-icon" href="/icons/logo192.png" />
         </Head>
-        <Component {...pageProps} />
     </div>
   );
 }

@@ -67,7 +67,7 @@ export default function Tutorials({upcoming}) {
                 <meta property="og:image" content={upcoming.article_thumbnail_url}/>
                 <meta name="twitter:card" content="summary_large_image"/> 
                 <meta name="twitter:image" content={upcoming.article_thumbnail_url}/>
-                <Script
+                <script
                     type="application/ld+json" 
                     dangerouslySetInnerHTML={{ __html: jsonLdContent }}
                 />

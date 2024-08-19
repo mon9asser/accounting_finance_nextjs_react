@@ -144,7 +144,7 @@ export default function Search({ upcoming }) {
                 <meta property="og:image" content={upcoming.settings.site_thumbnail_url}/>
                 <meta name="twitter:card" content="summary_large_image"/> 
                 <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
-                <Script
+                <script
                     type="application/ld+json" 
                     dangerouslySetInnerHTML={{ __html: jsonLdContent }}
                 />

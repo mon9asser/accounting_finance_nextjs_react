@@ -172,9 +172,11 @@ class HelperData {
       method 
     }
 
-    if( method.toLowerCase() == 'post') {
+    if( method.toLowerCase() == 'post') { 
       requestObject.body = data; 
     }
+
+    
     var url = `${Config.api}/${api}`;
     
     var response = await fetch(`${url}`, requestObject ); 

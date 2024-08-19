@@ -158,6 +158,8 @@ var FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
     data_title: data_title
   });
 
+  
+
   const [isDisabled, setIsDisabled] = useState(false);
   var [data, data_change] = useState({
     is_pressed: false, 
@@ -196,13 +198,19 @@ var FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
         press_type: presstype,
         is_pressed: true
       })
-     // console.log(feedback);
-      var response = await this.sendRequest({
+      
+      // console.log(feedback);
+      var res = await Helper.sendRequest({
         api: "comments/create-update",
-        data: feedback, 
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(feedback), 
         method: "post"
       }); 
-      
+
+      var response =  await res.json(); 
+       
       if( presstype == 'comment' ) {
         
         if( response.is_error ) {
@@ -340,8 +348,13 @@ var FeedBackBlock = ({data_id, data_title, feeadback_title }) => {
 
 }
 
-function SubscribeComponents ({is_footer, title, description, camp_data }) {
-         
+function SubscribeComponents ({is_footer, title, description, camp_data, settings }) {
+  
+  var is_middle = false; 
+  if( settings != undefined && settings.banner_image_url == "" ) {
+    is_middle = true; 
+  }
+
   var [email, setEmail] = useState('')
   var [result, setRestult] = useState({
       message: '',
@@ -417,7 +430,9 @@ function SubscribeComponents ({is_footer, title, description, camp_data }) {
       }
       
       
-      <div style={{margin: "0 auto"}}>
+
+
+      <div style={is_middle ? {margin: "0 auto"}: {}}>
         <div className={`response-msg ${result.cls} ${result.type}`}>{result.message}</div>
           <AdCompaignBox position="before_subscribe" data={camp_data}/> 
           <form className="set-center form-group set-focus" action="/" method="get"> 

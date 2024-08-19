@@ -170,7 +170,7 @@ export default function Tutorials({upcoming}) {
                     <meta name="twitter:card" content="summary_large_image"/> 
                     <meta name="twitter:image" content={upcoming.tutorial?.thumbnail_url}/>
                     
-                    <Script 
+                    <script 
                         type="application/ld+json" 
                         dangerouslySetInnerHTML={{__html: json_code_var}}
                     /> 
@@ -203,7 +203,7 @@ export default function Tutorials({upcoming}) {
                     />
                     </div>
                 </div>
-
+                 
                 <FeedBackBlock data_id={upcoming.tutorial._id} data_title={upcoming.tutorial.tutorial_title} feeadback_title="How Would You Like to Rate This Content?"/>
 
                 
@@ -246,6 +246,7 @@ export async function getServerSideProps(context) {
             data: {}
         })
 
+        
 
         if (!request.ok) {
             throw new Error('Server is offline');
@@ -256,6 +257,14 @@ export async function getServerSideProps(context) {
         if( request.status == 200) {
             
             var json = await request.json();  
+              
+            if( json.is_error && !json.data.length ) {
+                console.log("data here")
+                return {
+                    notFound: true
+                }
+            }
+
             var site_url = json.data.settings.site_address;
             if(site_url) {
                 var url_array = site_url.split('/');

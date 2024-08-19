@@ -105,7 +105,11 @@ export default function Header({settings, menus}) {
 
                     <div ref={sidebarContentRef} className="aside-content white-bg" id="sidebar-content"> 
                         <div className="flexbox items-center content-center site-logo-container">
-                            <a className="site-logo" href="#"><Image src={ (settings != null && settings?.site_logo != "")? settings.site_logo: logo} alt="Logo Site" width="135" height="36" /></a>
+                            {
+                                settings != null && settings.site_logo != ""?
+                                <Link className="site-logo" href={site_url}><Image src={settings.site_logo} alt="Logo Site" width="135" height="36" /></Link>
+                                : ""
+                            }
                         </div>
                         
                         <div className="wrapper side-wrapper">
@@ -140,14 +144,19 @@ export default function Header({settings, menus}) {
 
                     <header className="wrapper white-bg border-bottom plr-0 sticky">
                     <nav className="flexbox items-center offset-left offset-right plr-15 max-1172 default-height">
-                        <Link href={site_url} className="site-logo">
-                            <Image 
-                                alt={settings.site_name}
-                                width="135" 
-                                height="36"
-                                src={(settings != null && settings?.site_logo != "")? settings.site_logo: logo}  
-                            /> 
-                        </Link>
+                        
+                        {
+                            settings != null && settings?.site_logo != "" ?
+                            <Link href={site_url} className="site-logo">
+                                <Image 
+                                    alt={settings.site_name}
+                                    width="135" 
+                                    height="36"
+                                    src={settings?.site_logo}  
+                                /> 
+                            </Link>: ""
+                        }
+                        
 
                         <ul className="inline-list left-p-30 main-nav">
                             {
