@@ -148,34 +148,7 @@ export default function Tutorials({upcoming}) {
     var TutorialContentComponents = () => {
         return (
             <>
-                <Head>
-                    <title>{upcoming.tutorial?.meta_title}</title>
-                    <meta name="description" content={upcoming.tutorial?.meta_description} />
-                    {
-                        upcoming.tutorial?.options?.hide_from_search_engines ?
-                        <meta name="robots" content={"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"} />
-                        : ""
-                    } 
-
-                    <link rel="canonical" href={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/`}/>
-                    <meta property="og:locale" content="en_US"/>
-                    <meta property="og:type" content="article"/>
-                    <meta property="og:title" content={upcoming.tutorial?.meta_title}/>
-                    <meta property="og:description" content={upcoming.tutorial?.meta_description}/>
-                    <meta property="og:url" content={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/`}/>
-                    <meta property="og:site_name" content={upcoming.settings.site_name}/> 
-
-                    
-                    <meta property="og:image" content={upcoming.tutorial?.thumbnail_url}/>
-                    <meta name="twitter:card" content="summary_large_image"/> 
-                    <meta name="twitter:image" content={upcoming.tutorial?.thumbnail_url}/>
-                    
-                    <script 
-                        type="application/ld+json" 
-                        dangerouslySetInnerHTML={{__html: json_code_var}}
-                    /> 
-                    {header_content}  
-                </Head> 
+                
 
             <main className="wrapper max-1250 offset-left offset-right ptb-50">
 
@@ -214,6 +187,34 @@ export default function Tutorials({upcoming}) {
     
     return (
         <>
+        <Head>
+            <title>{upcoming.tutorial?.meta_title}</title>
+            <meta name="description" content={upcoming.tutorial?.meta_description} />
+            {
+                upcoming.tutorial?.options?.hide_from_search_engines ?
+                <meta name="robots" content={"noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"} />
+                : ""
+            } 
+
+            <link rel="canonical" href={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/`}/>
+            <meta property="og:locale" content="en_US"/>
+            <meta property="og:type" content="article"/>
+            <meta property="og:title" content={upcoming.tutorial?.meta_title}/>
+            <meta property="og:description" content={upcoming.tutorial?.meta_description}/>
+            <meta property="og:url" content={`${upcoming.site_url}tutorials/${upcoming.tutorial?.slug}/`}/>
+            <meta property="og:site_name" content={upcoming.settings.site_name}/> 
+
+            
+            <meta property="og:image" content={upcoming.tutorial?.thumbnail_url}/>
+            <meta name="twitter:card" content="summary_large_image"/> 
+            <meta name="twitter:image" content={upcoming.tutorial?.thumbnail_url}/>
+            
+            <script 
+                type="application/ld+json" 
+                dangerouslySetInnerHTML={{__html: json_code_var}}
+            /> 
+            {header_content}  
+        </Head> 
             <Header 
                 settings={upcoming.settings}
                 menus={{

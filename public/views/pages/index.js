@@ -252,6 +252,7 @@ export default function Home({upcoming}){
 
 export async function getServerSideProps(context) {
 
+   
     try {
             var request = await Helper.sendRequest({
                 api: "home-page/get",
