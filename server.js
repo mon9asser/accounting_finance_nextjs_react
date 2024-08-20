@@ -139,12 +139,12 @@ app.get('*', (req, res) => {
 
 });
 */
- 
+ /*
 app.listen(Config.server.port, () => {
   console.log(`The server is running on port ${Config.server.port}`);
 });
+*/
 
-/*
 
 // Load SSL certificate and key
 const sslOptions = {
@@ -156,4 +156,3 @@ const sslOptions = {
 https.createServer(sslOptions, app).listen(Config.server.port, () => {
     console.log(`The server is running on port ${Config.server.port}`);
 });
-*/

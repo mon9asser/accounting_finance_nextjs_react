@@ -75,7 +75,7 @@ export default function Home({upcoming}){
                                             }
                                             
                                             <h3>
-                                                <Link target="_blank" href={`${upcoming.site_url}tutorials/${tutorial.slug}/`}>{tutorial.tutorial_title}</Link>
+                                                <Link href={`${upcoming.site_url}tutorials/${tutorial.slug}/`}>{tutorial.tutorial_title}</Link>
                                                 
                                                 {
                                                     tutorial?.selected_category?.name != ''? 
@@ -84,7 +84,7 @@ export default function Home({upcoming}){
                                                 }
                                                 
                                             </h3>
-                                            <Link target="_blank" className="floating-all" href={`${upcoming.site_url}tutorials/${tutorial.slug}/`}></Link>
+                                            <Link className="floating-all" href={`${upcoming.site_url}tutorials/${tutorial.slug}/`}></Link>
                                         </div>
                                     </div>
                                 )

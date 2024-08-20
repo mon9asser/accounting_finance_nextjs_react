@@ -297,7 +297,7 @@ sitemapRouter.get("/sitemap_index.xml", async (req, res) => {
 })
 */
 
-sitemapRouter.get( '/sitemap_articles', async (req, res) => {
+sitemapRouter.get( '/sitemap_articles', middlewareTokens, async (req, res) => {
     try {
         
         var posts = await Posts.find({ post_type: 0, is_published: true, allow_search_engine: true });
@@ -329,7 +329,7 @@ sitemapRouter.get( '/sitemap_articles', async (req, res) => {
 });
 
 
-sitemapRouter.get('/sitemap_pages', async (req, res) => {
+sitemapRouter.get('/sitemap_pages', middlewareTokens, async (req, res) => {
     try {
         var posts = await Posts.find({ post_type: 1, is_published: true, allow_search_engine: true });
         
@@ -354,7 +354,7 @@ sitemapRouter.get('/sitemap_pages', async (req, res) => {
 });
 
 
-sitemapRouter.get( '/sitemap_users', async (req, res) => {
+sitemapRouter.get( '/sitemap_users', middlewareTokens, async (req, res) => {
     
     try {
         var users = await Usr.find({ allow_appears_in_search_engine: true, is_blocked: false });
@@ -379,7 +379,7 @@ sitemapRouter.get( '/sitemap_users', async (req, res) => {
 
 });
  
-sitemapRouter.get('/sitemap_tutorials', async (req, res) => {
+sitemapRouter.get('/sitemap_tutorials', middlewareTokens, async (req, res) => {
     try {
         var tutorials = await Tutorial.find({ "options.publish": true });
 
@@ -403,7 +403,7 @@ sitemapRouter.get('/sitemap_tutorials', async (req, res) => {
 });
 
 
-sitemapRouter.get('/sitemap_tabs', async (req, res) => {
+sitemapRouter.get('/sitemap_tabs', middlewareTokens, async (req, res) => {
     try {
         var tutorials = await Tutorial.find({ "options.publish": true }); 
         var all_tabs = tutorials.map(mtuts => 
@@ -441,7 +441,7 @@ sitemapRouter.get('/sitemap_tabs', async (req, res) => {
     }
 }); 
  
-sitemapRouter.get("/sitemap_index", async (req, res) => {
+sitemapRouter.get("/sitemap_index", middlewareTokens, async (req, res) => {
     try {
         var posts = await Posts.find({ post_type: 0, is_published: true, allow_search_engine: true });
         var pages = await Posts.find({ post_type: 1, is_published: true, allow_search_engine: true });
@@ -560,7 +560,7 @@ sitemapRouter.get("/ads.txt", async (req, res) => {
 });
 */
 
-sitemapRouter.get("/robots", async (req, res) => {
+sitemapRouter.get("/robots", middlewareTokens, async (req, res) => {
     try {
         // Fetch the settings from the database
         var settings = await Sets.find({});
@@ -602,7 +602,7 @@ sitemapRouter.get("/robots", async (req, res) => {
 
 
 // Ads.txt file 
-sitemapRouter.get("/ads", async (req, res) => {
+sitemapRouter.get("/ads", middlewareTokens, async (req, res) => {
     try {
         // Fetch the settings from the database
         var settings = await Sets.find({});
