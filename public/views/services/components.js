@@ -1443,7 +1443,75 @@ const TableOfContent = ({ data }) => {
   );
 };
 
+var ArticleContent = ({blocks}) => {
+      
+  var subheadings = blocks.filter(x => x.type == 'header' && x.id != 'header-level-1' ).map(x => ({
+    href: Helper.generate_slugs(x?.data?.text),
+    title: x?.data?.text
+  }));
 
+  return(
+    <>
+      {blocks?.map((x, index) => {
+
+        if(x.id != 'header-level-1') {
+           
+          // return <TableOfContent/>
+
+          if( x.type == 'paragraph') {
+            return (
+              <Fragment key={x.id}>
+                <p style={{textAlign:x?.data?.alignment}} dangerouslySetInnerHTML={{__html: x?.data?.text}}/>
+                {
+                  index == 1 && subheadings.length ? <TableOfContent data={subheadings}/>: ""
+                }
+              </Fragment>
+            )
+          } else if (x.type == 'code' ) {
+            return (
+              <Highlight key={x.id} className={x?.data?.language_type}>
+                {x?.data?.value}
+              </Highlight>
+            )
+          } else if (x.type == 'image') {
+            return (
+              <figure key={x.id}> 
+                    <Image
+                        className={x?.data?.stretched ? 'full': 'half'}
+                        alt={x?.data?.caption}
+                        height={250}
+                        src={x?.data?.file?.url} // use normal <img> attributes as props
+                        width={x?.data?.file?.width} /> 
+              </figure>
+            )
+          } else if (x.type == 'header') { 
+
+            return ( 
+              createElement(`h${Math.min(Math.max(x?.data?.level, 1), 6)}`, {key: x.id, id:Helper.generate_slugs(x?.data?.text), style:{textAlign: x?.data?.alignment }}, x?.data?.text)
+            )
+
+          } else if (x.type == 'youtubeEmbed') {
+            return (<LazyLoadYouTube key={x.id} url={x.data?.url} height='500'/>);
+          } else if (x.type == 'delimiter') {
+            return (<hr key={x.id} />)
+          } else if (x.type == 'raw') {
+            return (
+              <Highlight key={x.id} className={'html'}>
+                {x?.data?.html}
+              </Highlight>
+            )
+          } else if (x.type == 'table') {
+            return <ResponsiveTable key={x.id} data={x.data} />
+          } else if (x.type == 'list') {
+            return <StyledList key={x.id} data={x.data} />
+          } 
+
+        } 
+
+      })}
+    </>
+  );     
+}
 /*
 var TableOfContent = ({data}) => {
 
@@ -1488,5 +1556,6 @@ export {
   Breadcrumbs,
   NextPrevPagination,
   ArticleContentSingle,
+  ArticleContent,
   GenerateTutorialContent_tab
 }

@@ -11,15 +11,18 @@ import {
     NextPrevPagination,
     SocialShare,
     FeedBackBlock,
+    ServerOffline
 } from "./../../../services/components"
 import parse from 'html-react-parser' 
-import Head from "next/head";
-
+import Head from "next/head"; 
  
 export default function Post ({upcoming}) {
     
 
     
+    if(!upcoming) {
+        return <ServerOffline/>
+    }
 
      
     var image = ''

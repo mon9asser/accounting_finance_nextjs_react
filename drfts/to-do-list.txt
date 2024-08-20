@@ -1,10 +1,10 @@
 terms-and-conditions.js
 privacy-policy.js
-contact.js
+
 about.js
 
-tab-article.js
-
+- ✔ contact.js
+- ✔ tab-article.js
 - ✔ tab.js
 - ✔ tutorials.js
 - ✔ tutorial.js
