@@ -21,6 +21,13 @@ const nextConfig = {
                 hostname: 'freeaccountingtutorial.com',
                 pathname: '/**',
             },
+            
+            {
+              protocol: 'https',
+              hostname: 'media.freeaccountingtutorial.com',
+              pathname: '/**',
+            },
+
         ],
     }, 
     
