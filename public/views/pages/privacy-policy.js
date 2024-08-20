@@ -26,7 +26,7 @@ export default function PrivacyPolicy({upcoming}) {
                             "@type": "WebSite",
                             "url": "${upcoming.settings?.site_address}${upcoming.slug}/", 
                             "name": "${upcoming.meta_title}",
-                            "description": "${upcoming.meta_description}"
+                            "description": "${upcoming.meta_description}",
                             "mainEntity": {
                                     "@type": "Organization",
                                     "name": "${upcoming.settings?.site_name}",
