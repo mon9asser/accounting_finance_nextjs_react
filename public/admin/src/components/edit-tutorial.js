@@ -373,7 +373,8 @@ class EditTutorialWrap extends Component {
             meta_title: this.state.meta_title,
             slug: this.state.slug,
             keyphrase: this.state.keyphrase,
-            meta_description: this.state.meta_description, 
+            meta_description: this.state.meta_description,
+            enable_beside_title: this.state.enable_beside_title,
             thumbnail_url:this.state.thumbnail_url, 
             tag: this.state.tag, 
             tutorial_svg_icon: this.state.tutorial_svg_icon, 
@@ -608,7 +609,7 @@ class EditTutorialWrap extends Component {
                                         <div className="control">
                                             <input 
                                                 onChange={e => this.setState({
-                                                    enable_beside_title: ! this.state.enable_beside_title
+                                                    enable_beside_title: e.target.value
                                                 })}
                                                 checked={this.state.enable_beside_title}
                                                 type="checkbox"  
