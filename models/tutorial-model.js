@@ -83,6 +83,7 @@ let tutorialSchema = new Schema({
     },
     options: {
         type: {
+            enable_beside_title: { type: Boolean , trim : true,  default: false },
             show_total_of_tutorial: { type: Boolean , trim : true,  default: false },
             show_duration_time: { type: Boolean , trim : true,  default: false },
             enable_reviews: { type: Boolean , trim : true,  default: false },
