@@ -640,6 +640,7 @@ class wrappedEditPost extends Component {
             selected_tab: post.selected_tab,
             keyphrase: post.keyphrase,
             meta_description: post.meta_description,
+            enable_beside_title: post.enable_beside_title,
             article_thumbnail_url: post.article_thumbnail_url,
             tutorial: post?.tutorial || {},
             allow_search_engine: post.allow_search_engine,
@@ -709,7 +710,7 @@ class wrappedEditPost extends Component {
             meta_title: this.state.meta_title,
             enable_beside_title: this.state.enable_beside_title,
             slug: this.state.slug,
-            meta_description: this.state.meta_description,
+            meta_description: this.state.meta_description, 
             article_thumbnail_url: this.state.article_thumbnail_url,
             tutorial: this.state.tutorial,
             allow_search_engine: this.state.allow_search_engine,
@@ -909,7 +910,19 @@ class wrappedEditPost extends Component {
                                         </span>
                                     </label> 
                                     
-                                    <label className="flexbox items-center"> <input checked={this.state.enable_beside_title} onChange={(e) => this.setState({ enable_beside_title: !this.state.enable_beside_title })} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Enable Beside Meta Title </span> </label>
+                                    <label className="flexbox items-center"  style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
+                                        <input 
+                                            checked={this.state.enable_beside_title} 
+                                            onChange={() => this.setState(prevState => ({ 
+                                                enable_beside_title: !prevState.enable_beside_title 
+                                            }))} 
+                                            className="mr-8" 
+                                            type="checkbox" 
+                                        />
+                                        <span style={{ marginLeft: 5, fontSize: "14px" }}>
+                                            Enable Beside Meta Title
+                                        </span>
+                                    </label>
  
                                     <label style={{display:"flex", alignItems: "center", background:"#fff", padding: "20px", color:"#333"}}>
                                         <span style={{flexBasis: '80px'}}>
