@@ -33,6 +33,7 @@ class CreateTutorial extends Component {
             tag: '',
             options: {
                 show_total_of_tutorial: false,
+                enable_beside_title: true,
                 show_duration_time: false,
                 enable_reviews: false,
                 show_views: false,
@@ -693,6 +694,7 @@ class CreateTutorial extends Component {
                                             <label className="flexbox items-center mr-15"> 
                                                 <input checked={this.state.options.show_total_of_tutorial} onChange={(e) => this.setState({options: { ...this.state.options, show_total_of_tutorial: !this.state.options.show_total_of_tutorial }})} className="mr-8" type="checkbox" />
                                             <span style={{marginLeft: 5, fontSize: "14px"}}>Show total of tutorial</span> </label>
+                                            <label className="flexbox items-center"> <input checked={this.state.options.enable_beside_title} onChange={(e) => this.setState({options: { ...this.state.options, enable_beside_title: !this.state.options.enable_beside_title }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Enable Beside Meta Title </span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.show_duration_time} onChange={(e) => this.setState({options: { ...this.state.options, show_duration_time: !this.state.options.show_duration_time }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show duration time </span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.enable_reviews} onChange={(e) => this.setState({options: { ...this.state.options, enable_reviews: !this.state.options.enable_reviews }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Enable reviews </span> </label>
                                             <label className="flexbox items-center"> <input checked={this.state.options.show_views} onChange={(e) => this.setState({options: { ...this.state.options, show_views: !this.state.options.show_views }})} className="mr-8" type="checkbox" /><span style={{marginLeft: 5, fontSize: "14px"}}>Show views</span> </label>
