@@ -25,6 +25,7 @@ class EditTutorialWrap extends Component {
             selected_category: null,
             
             tutorial_title: "",
+            enable_beside_title:true,
             duration: "",
             description: "", 
             content: "",
@@ -263,6 +264,7 @@ class EditTutorialWrap extends Component {
             tutorial_id: tutorial._id, 
             selected_category: tutorial.selected_category, 
             tutorial_title: tutorial.tutorial_title,
+            enable_beside_title: tutorial.enable_beside_title,
             duration: tutorial.duration,
             description: tutorial.description,
             content: tutorial.content,
@@ -364,6 +366,7 @@ class EditTutorialWrap extends Component {
 
         var data_to_send = {
             tutorial_title: this.state.tutorial_title,
+            enable_beside_title:this.state.enable_beside_title,
             duration: this.state.duration,
             description: this.state.description,
             content: this.state.content,
@@ -596,6 +599,19 @@ class EditTutorialWrap extends Component {
                                                 className="input" 
                                                 type="text" 
                                                 placeholder="e.g. Python Tutorial" 
+                                            />
+                                        </div> 
+                                    </div> 
+
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Enable Beside Title</label>
+                                        <div className="control">
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    enable_beside_title: ! this.state.enable_beside_title
+                                                })}
+                                                checked={this.state.enable_beside_title}
+                                                type="checkbox"  
                                             />
                                         </div> 
                                     </div> 

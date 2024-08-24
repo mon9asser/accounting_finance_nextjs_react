@@ -18,7 +18,7 @@ class CreateTutorial extends Component {
 
             categories: [],
             selected_category: null,
-
+            enable_beside_title:true,
             tutorial_title: "",
             duration: "",
             description: "", 
@@ -265,6 +265,7 @@ class CreateTutorial extends Component {
 
         var data_to_send = {
             tutorial_title: this.state.tutorial_title,
+            enable_beside_title: this.state.enable_beside_title,
             duration: this.state.duration,
             description: this.state.description,
             content: this.state.content,
@@ -503,7 +504,18 @@ class CreateTutorial extends Component {
                                             />
                                         </div> 
                                     </div> 
-
+                                    <div className="field" style={{marginTop: "25px"}}>
+                                        <label className="label">Enable Beside Title</label>
+                                        <div className="control">
+                                            <input 
+                                                onChange={e => this.setState({
+                                                    enable_beside_title: ! this.state.enable_beside_title
+                                                })}
+                                                checked={this.state.enable_beside_title}
+                                                type="checkbox"  
+                                            />
+                                        </div> 
+                                    </div> 
                                     <div className="field" style={{marginTop: "25px"}}>
                                         <label className="label">Duration</label>
                                         <div className="control">

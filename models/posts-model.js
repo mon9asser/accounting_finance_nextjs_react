@@ -56,6 +56,10 @@ let postsSchema = new Schema({
         type: Boolean,  
         default: true
     },
+    enable_beside_title: {
+        type: Boolean,  
+        default: true
+    },
     page_template: {
         type: String,  
         default: '' // no_found_404 - contact_us - about_us - 
