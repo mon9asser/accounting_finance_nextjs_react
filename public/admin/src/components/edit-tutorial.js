@@ -608,8 +608,8 @@ class EditTutorialWrap extends Component {
                                         <label className="label">Enable Beside Title</label>
                                         <div className="control">
                                             <input 
-                                                onChange={e => this.setState({
-                                                    enable_beside_title: e.target.value
+                                                onChange={e => this.setState((prevState) => {
+                                                    enable_beside_title: ! prevState.enable_beside_title
                                                 })}
                                                 checked={this.state.enable_beside_title}
                                                 type="checkbox"  
