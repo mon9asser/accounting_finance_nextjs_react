@@ -276,7 +276,7 @@ export async function getServerSideProps(context) {
          
        
         var {tutorial, post} = context.params;
-         
+         console.log(tutorial, post);
         var request = await Helper.sendRequest({  
             api: `post-page/get?tut_name=${tutorial}&post_slug=${post}&tab=root`,
             method: "get",
@@ -297,7 +297,7 @@ export async function getServerSideProps(context) {
             var json = await request.json();    
             
             
-            
+            console.log(json.data.post)
             
             if( json.is_error || json.data.post == undefined|| json.data.post == null ) { 
                 return {
@@ -314,8 +314,8 @@ export async function getServerSideProps(context) {
             } 
             json.data.settings.site_address = site_url;
             
-            //&& json.data.post.enable_beside_title
-            if( json.data.settings?.beside_post_title  != ""  ) { 
+            
+            if( json.data.settings?.beside_post_title  != "" && json.data.post.enable_beside_title  ) { 
                 json.data.post.meta_title = json.data.post.meta_title + " " + json.data.settings?.beside_post_title;
             }
              
