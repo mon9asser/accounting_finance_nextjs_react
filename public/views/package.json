@@ -6,7 +6,8 @@
     "dev": "next dev -p 1001",
     "build": "next build",
     "start": "next start -p 1001",
-    "lint": "next lint"
+    "lint": "next lint",
+    "play": "forever start -c 'npm run start' ./"
   },
   "dependencies": {
     "he": "^1.2.0",
