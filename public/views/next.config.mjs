@@ -131,7 +131,13 @@ const nextConfig = {
                     permanent: parseInt(x.redirectType) == 301 ? true : false,
                 };
             });
-    
+            
+            redirects.push({
+              source: '/Root',
+              destination: '/',
+              permanent: true,
+            });
+
             return redirects;
     
         } catch (error) {
