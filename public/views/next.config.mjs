@@ -2,6 +2,8 @@
 import os from 'os';
 
 const nextConfig = { 
+    reactStrictMode: true,
+    productionBrowserSourceMaps: true, 
     trailingSlash: true,  
     images: {
         remotePatterns: [
