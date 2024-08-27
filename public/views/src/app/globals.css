@@ -1110,3 +1110,9 @@ ul li a.expanded-a::after{
  .latest-post-list li a .post-data span {
     font-size: 12px;
  }
+
+
+ .content-tble-mobile-block ul {
+    height: 100%;
+    overflow-y: auto;
+ }
