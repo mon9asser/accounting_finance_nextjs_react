@@ -276,7 +276,7 @@ export async function getServerSideProps(context) {
          
        
         var {tutorial, post} = context.params;
-         console.log(tutorial, post);
+          
         var request = await Helper.sendRequest({  
             api: `post-page/get?tut_name=${tutorial}&post_slug=${post}&tab=root`,
             method: "get",

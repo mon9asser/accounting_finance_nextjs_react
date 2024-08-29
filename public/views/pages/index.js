@@ -95,9 +95,7 @@ export default function Home({upcoming}){
                             <>
                                 <ul className="latest-post-list">
                                    {
-                                    upcoming.latest_posts.map(x => {
-                                        console.log(x);
-
+                                    upcoming.latest_posts.map(x => { 
                                         var href = `${upcoming.site_url}tutorials/${x.tutorial.slug}/`;
                                         if(x.selected_tab && x.selected_tab._id != 'root') {
                                             href =`${href}t/${x.selected_tab.slug}/` 

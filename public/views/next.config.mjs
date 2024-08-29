@@ -2,6 +2,8 @@
 import os from 'os';
 
 const nextConfig = { 
+    reactStrictMode: true,
+    productionBrowserSourceMaps: true, 
     trailingSlash: true,  
     images: {
         remotePatterns: [
@@ -129,7 +131,13 @@ const nextConfig = {
                     permanent: parseInt(x.redirectType) == 301 ? true : false,
                 };
             });
-    
+            
+            redirects.push({
+              source: '/Root',
+              destination: '/',
+              permanent: true,
+            });
+
             return redirects;
     
         } catch (error) {
