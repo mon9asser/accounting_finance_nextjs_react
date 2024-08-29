@@ -62,8 +62,8 @@ class CustomCodeBlok {
                     </g>
                 </svg>
             </span>
-            <div className='hljs-copy-and-controller'>
-                <div className='hljs-lang-combox'></div>
+            <div class='hljs-copy-and-controller'>
+                <div class='hljs-lang-combox'></div>
             </div>
         `;
 
@@ -84,8 +84,8 @@ class CustomCodeBlok {
             selectLanguage.appendChild(option);
         });
 
-        // Append comboBox to codeHeader
-        codeHeader.querySelector('.hljs-lang-combox').appendChild(comboBox);
+        const langComboBox = codeHeader.querySelector('.hljs-lang-combox');
+        console.log(codeHeader); 
 
         // Code Section
         const block = document.createElement('div');
@@ -204,6 +204,5 @@ class CustomCodeBlok {
     }
          
 }
-
-
-export { CustomCodeBlok }
+  
+export { CustomCodeBlok };
