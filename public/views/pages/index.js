@@ -195,8 +195,9 @@ export default function Home({upcoming}){
                 <meta property="og:description" content={upcoming.settings.site_meta_description}/>
                 <meta property="og:url" content={upcoming.site_url}/>
                 <meta property="og:site_name" content={upcoming.settings.site_name}/> 
-                <meta property="og:image" content={upcoming.settings.site_thumbnail_url} />
+                
                 <meta name="twitter:card" content="summary_large_image"/> 
+                <meta property="og:image" content={upcoming.settings.site_thumbnail_url} />
                 <meta name="twitter:image" content={upcoming.settings.site_thumbnail_url}/>
                 <script
                     type="application/ld+json" 

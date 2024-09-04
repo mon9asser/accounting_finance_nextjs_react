@@ -295,9 +295,7 @@ export async function getServerSideProps(context) {
         if( request.status == 200) {
             
             var json = await request.json();    
-            
-            
-            console.log(json.data.post)
+             
             
             if( json.is_error || json.data.post == undefined|| json.data.post == null ) { 
                 return {

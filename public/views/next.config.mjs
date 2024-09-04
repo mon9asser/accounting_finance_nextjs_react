@@ -7,29 +7,10 @@ const nextConfig = {
     trailingSlash: true,  
     images: {
         remotePatterns: [
-            {
-                protocol: 'http',
-                hostname: 'localhost',
-                pathname: '/**',
-            },
-            {
-                protocol: 'https',
-                hostname: 'codedtag.com',
-                pathname: '/**',
-            },
-            
-            {
-                protocol: 'https',
-                hostname: 'freeaccountingtutorial.com',
-                pathname: '/**',
-            },
-            
-            {
+          {
               protocol: 'https',
-              hostname: 'media.freeaccountingtutorial.com',
-              pathname: '/**',
-            },
-
+              hostname: '**',
+          }
         ],
     }, 
     

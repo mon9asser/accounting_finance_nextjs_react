@@ -1082,6 +1082,7 @@ var ArticleContentSingle = ({blocks, helper}) => {
     <>
       {blocks?.map((x, index) => {
 
+        
         if(x.id != 'header-level-1') {
            
           // return <TableOfContent/>
@@ -1145,7 +1146,19 @@ var ArticleContentSingle = ({blocks, helper}) => {
             return <ResponsiveTable key={x.id} data={x.data} />
           } else if (x.type == 'list') {
             return <StyledList key={x.id} data={x.data} />
-          } 
+          } else if (x.type == 'customImage') {
+             
+            return (
+              <figure key={x.id}> 
+                    <Image
+                        className={x?.data?.stretched ? 'full': 'half'}
+                        alt={x?.data?.alt}
+                        height={320}
+                        src={x?.data?.url} // use normal <img> attributes as props
+                        width={400} /> 
+              </figure>
+            )
+          }
 
         } 
 
@@ -1454,6 +1467,8 @@ var ArticleContent = ({blocks}) => {
     <>
       {blocks?.map((x, index) => {
 
+       
+
         if(x.id != 'header-level-1') {
            
           // return <TableOfContent/>
@@ -1504,7 +1519,19 @@ var ArticleContent = ({blocks}) => {
             return <ResponsiveTable key={x.id} data={x.data} />
           } else if (x.type == 'list') {
             return <StyledList key={x.id} data={x.data} />
-          } 
+          } else if (x.type == 'customImage') {
+             
+            return (
+              <figure key={x.id}> 
+                    <Image
+                        className={x?.data?.stretched ? 'full': 'half'}
+                        alt={x?.data?.alt}
+                        height={320}
+                        src={x?.data?.url} // use normal <img> attributes as props
+                        width={400} /> 
+              </figure>
+            )
+          }
 
         } 
 
